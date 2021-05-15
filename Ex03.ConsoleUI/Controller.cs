@@ -11,6 +11,11 @@ namespace Ex03.ConsoleUI
     {
         private readonly GarageManagement r_GarageModel;
         private readonly UserInterface r_UserInterfaceView;
+        private const int k_MinLengthForFullName = 2;
+        private const int k_MaxLengthForFullName = 18;
+        private const int k_MinLengthForPhoneNumber = 6;
+        private const int k_MaxLengthForPhoneNumber = 10;
+
 
         public Controller()
         {
@@ -154,8 +159,7 @@ status: {2}",
                     ownerPhone,
                     vehicleStatus);
                 r_UserInterfaceView.DisplayMassage(msgToPrint);
-                r_UserInterfaceView.DisplayMassage("----------------------------");
-                r_UserInterfaceView.VehiclePrint(vehiclePackage.Vehicle);
+                VehiclePrint(vehiclePackage.Vehicle);
             }
         }
 
@@ -178,10 +182,8 @@ status: {2}",
         }
         private bool addNewVehicleToGarage(string i_LicenseNumber)
         {
-            //// TODO: who should validate the input? object or user?
             bool valToReturn = false;
             GarageEnums.eVehicleType vehicleType = 0;
-            ////TODO: move buildChoice to controller
             vehicleType = (GarageEnums.eVehicleType)buildChoiceMenu(vehicleType);
             Vehicle vehicleToAdd = VehicleFactory.CreateVehicle(vehicleType, i_LicenseNumber, GetGeneralInfoForVehicle());
             (string costumerName, string costumerPhone) = GetCostumerDetails();
@@ -293,6 +295,46 @@ status: {2}",
                 }
             }
         }
+        private void getVariable(ref string i_StringToInitialize,int i_MinLength, int i_MaxLength)
+        {
+            bool isValid = false;
+            while(isValid == false)
+            {
+                getVariable(ref i_StringToInitialize);
+                int lengthOfString = i_StringToInitialize.Length;
+                if(i_MinLength <= lengthOfString && lengthOfString <= i_MaxLength)
+                {
+                    isValid = true;
+                }
+                else
+                {
+                    //// input is not valid
+                    GarageExceptions.ValueOutOfRangeException voore =
+                        new GarageExceptions.ValueOutOfRangeException(0, i_MaxLength);
+                    r_UserInterfaceView.DisplayMassage(voore.Message);
+                }
+            }
+        }
+
+        private void getVariable(ref float i_FloatToInitialize, float i_MinVal, float i_MaxVal)
+        {
+            bool isValid = false;
+            while (isValid == false)
+            {
+                getVariable(ref i_FloatToInitialize);
+                if(i_MaxVal <= i_FloatToInitialize && i_FloatToInitialize <= i_MaxVal)
+                {
+                    isValid = true;
+                }
+                else
+                {
+                    //// input is not valid
+                    GarageExceptions.ValueOutOfRangeException voore =
+                        new GarageExceptions.ValueOutOfRangeException(i_MinVal, i_MaxVal);
+                    r_UserInterfaceView.DisplayMassage(voore.Message);
+                }
+            }
+        }
         private int buildChoiceMenu<T>(T i_Param)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -309,12 +351,52 @@ status: {2}",
             {
                 getVariable(ref userInput);
                 //// TODO convert userinput inside enumv alidation?
-                isInputValid = GenericEnumValidation(typeof(T), userInput);
+                isInputValid = genericEnumValidation(typeof(T), userInput);
             }
             return int.Parse(userInput);
         }
+        public void VehiclePrint(Vehicle i_Vehicle)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(
+                $@"
+Print Vehicle:
+Model name: {i_Vehicle.ModelName}.
+License number: {i_Vehicle.LicenseNumber}.
+Energy left: {i_Vehicle.EnetgyLeft}.");
 
-        private bool GenericEnumValidation(Type i_Type, string i_UserInput)
+            foreach (Wheel wheel in i_Vehicle.Wheels)
+            {
+                stringBuilder.Append($"wheel info:\n {wheel.GetInfo()}");
+            }
+
+            if (i_Vehicle is IMotorized)
+            {
+                stringBuilder.Append($"Fuel Type: {(i_Vehicle as IMotorized).FuelType}");
+                stringBuilder.Append($"Fuel current amount: {(i_Vehicle as IMotorized).CurrentAmountOfFuel}");
+                stringBuilder.Append($"Fuel Max amount of fuel: {(i_Vehicle as IMotorized).MaxAmountOfFuel}");
+            }
+
+            if (i_Vehicle is IElectrical)
+            {
+                stringBuilder.Append($"battery time left: {(i_Vehicle as IElectrical).BatteryTimeLeft}");
+                stringBuilder.Append($"battery max time: {(i_Vehicle as IElectrical).MaxBatteryTime}");
+            }
+
+            if (i_Vehicle is Car)
+            {
+                stringBuilder.Append($"Number of doors: {(i_Vehicle as Car).NumberOfDoors}");
+                stringBuilder.Append($"Color: {(i_Vehicle as Car).Color}");
+            }
+
+            if (i_Vehicle is Motorcycle)
+            {
+                stringBuilder.Append($"License Type: {(i_Vehicle as Motorcycle).LicenseType}");
+                stringBuilder.Append($"Motor volume in cc: {(i_Vehicle as Motorcycle).EngineVolumeCC}");
+            }
+            r_UserInterfaceView.DisplayMassage(stringBuilder.ToString());
+        }
+        private bool genericEnumValidation(Type i_Type, string i_UserInput)
         {
             bool isValid = false;
             try
