@@ -213,7 +213,6 @@ status: {2}",
         }
         private void setMotorizedFields(Vehicle i_VehicleToAdd)
         {
-            //// TODO: input validation etc
             r_UserInterfaceView.DisplayMassage(($"What is The current amount of fuel in your vehicle? (max = {((IMotorized)i_VehicleToAdd).MaxAmountOfFuel})"));
             float currentAmountOfFuel = 0;
             getVariable(ref currentAmountOfFuel);
@@ -248,7 +247,6 @@ status: {2}",
         }
         private void setElectricalFields(Vehicle i_VehicleToAdd)
         {
-            //// TODO: input validation etc
             //// TODO: instead of value 0, try nullable
             float batteryTimeLeft = 0;
             r_UserInterfaceView.DisplayMassage("how many battery time left for electrical vehicle?");
@@ -262,7 +260,6 @@ status: {2}",
             r_UserInterfaceView.DisplayMassage("What is the licenseType of your motorcycle?");
             licenseType = (GarageEnums.eLicenseType)buildChoiceMenu(licenseType);
             r_UserInterfaceView.DisplayMassage("What is the volume of your motorcycle in CC?");
-            //// TODO: input validation and exception
             int motorcycleVolume = 0;
             getVariable(ref motorcycleVolume);
             (i_VehicleToAdd as Motorcycle)?.AddMotorcycleFields(licenseType, motorcycleVolume);
@@ -350,7 +347,6 @@ status: {2}",
             while (isInputValid == false)
             {
                 getVariable(ref userInput);
-                //// TODO convert userinput inside enumv alidation?
                 isInputValid = genericEnumValidation(typeof(T), userInput);
             }
             return int.Parse(userInput);

@@ -62,7 +62,6 @@ namespace Ex03.GarageLogic
 
         public List<VehiclePackage> GetVehicleByStatus()
         {
-            ////TODO: Consider the method name
             List<VehiclePackage> sortedList = new List<VehiclePackage>();
             sortedList = r_VehiclesList.OrderBy(vehiclePackage => vehiclePackage.Status).ToList();
             return sortedList;
