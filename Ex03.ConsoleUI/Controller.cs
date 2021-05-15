@@ -295,7 +295,7 @@ status: {2}",
                 }
             }
         }
-        private void getVariableas(ref string i_StringToInitialize,int i_MinLength, int i_MaxLength)
+        private void getVariable(ref string i_StringToInitialize,int i_MinLength, int i_MaxLength)
         {
             bool isValid = false;
             while(isValid == false)
