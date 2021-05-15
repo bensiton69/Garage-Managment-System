@@ -28,21 +28,6 @@ namespace Ex03.GarageLogic
             return true;
         }
 
-        public bool IsLicenseNumberMatch(string i_LicenseNumberToCheck)
-        {
-            bool isMatch = false;
-            foreach(VehiclePackage vehiclePackage in Vehicles)
-            {
-                if(i_LicenseNumberToCheck == vehiclePackage.Vehicle.LicenseNumber)
-                {
-                    isMatch = true;
-                    CurrentCustomer = vehiclePackage;
-                    break;
-                }
-            }
-
-            return isMatch;
-        }
         public bool IsLicenseNumberMatch(string i_LicenseNumberToCheck, ref VehiclePackage i_VehiclePackage)
         {
             bool isMatch = false;
@@ -96,14 +81,19 @@ namespace Ex03.GarageLogic
         public void ChangeVehicleStatus(string i_LicenseNumber, GarageEnums.eVehicleStatus i_VehicleStatus)
         {
             VehiclePackage vehiclePackage = null;
-            IsLicenseNumberMatch(i_LicenseNumber, ref vehiclePackage);
-            ////TODO: use property instead set()
-            vehiclePackage?.SetStatus(i_VehicleStatus);
+            if(IsLicenseNumberMatch(i_LicenseNumber, ref vehiclePackage))
+            {
+                ////TODO: use property instead set()
+                vehiclePackage.SetStatus(i_VehicleStatus);
+            }
+            else
+            {
+                throw new GarageExceptions.VehicleDoNotExist(i_LicenseNumber);
+            }
         }
 
         public void FillFuelForMotorized(string i_LicenseNumber, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
         {
-            //// TODO: duplicate methology to chrage, etc.
             VehiclePackage vehiclePackage = null;
             if(IsLicenseNumberMatch(i_LicenseNumber, ref vehiclePackage) == false)
             {
@@ -114,8 +104,6 @@ namespace Ex03.GarageLogic
             {
                 throw new ArgumentException("You can not fuel this vehicle!");
             }
-
-
             float currentAmountOfFuel = ((IMotorized)vehiclePackage.Vehicle).CurrentAmountOfFuel;
             float maxAmountToRefuel = ((IMotorized)vehiclePackage.Vehicle).MaxAmountOfFuel - currentAmountOfFuel;
             if(!(i_AmountOfFuelToRefuel <= maxAmountToRefuel))
@@ -129,19 +117,5 @@ namespace Ex03.GarageLogic
             (vehiclePackage.Vehicle as IMotorized)?.FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
         }
 
-        public bool CheckIfLicenseNumberIsMatch(string i_LicenseNumber)
-        {
-            ////TODO: dont use console
-            bool isMatch = false;
-            if (IsLicenseNumberMatch(i_LicenseNumber))
-            {
-                Console.WriteLine("This vehicle belong to: ");
-                Console.WriteLine($"Name: {CurrentCustomer.OwnerFullName}");
-                Console.WriteLine($"Phone Number: {CurrentCustomer.OwnerPhoneNumber}");
-                isMatch = true;
-            }
-
-            return isMatch;
-        }
     }
 }

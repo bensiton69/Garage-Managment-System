@@ -2,6 +2,18 @@
 {
     public class Truck: Vehicle, IMotorized
     {
+        private bool m_IsDanger;
+        private float m_MaxWeigth;
+        public bool IsDanger
+        {
+            get => m_IsDanger;
+            private set => m_IsDanger = value;
+        }
+        public float MaxWeight
+        {
+            get => m_MaxWeigth;
+            private set => m_MaxWeigth = value;
+        }
         public GarageEnums.eFuelType FuelType { get; set; }
 
         public float CurrentAmountOfFuel { get; set; }
@@ -17,6 +29,12 @@
         public void AddMotorizedFields(float i_CurrentAmountOfFuel)
         {
             CurrentAmountOfFuel = i_CurrentAmountOfFuel;
+        }
+
+        public void AddTruckFields(bool i_IsDanger, float i_MaxWeight)
+        {
+            IsDanger = i_IsDanger;
+            MaxWeight = i_MaxWeight;
         }
 
         public Truck(

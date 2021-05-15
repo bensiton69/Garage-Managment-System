@@ -22,7 +22,7 @@ namespace Ex03.GarageLogic
             private readonly string r_LicenseNumber;
 
             public VehicleDoNotExist(string i_LicenseNumber)
-                : base($"Vehicle: {i_LicenseNumber} do not exist!")
+                : base($"The Vehicle with license number: '{i_LicenseNumber}' do not exist!")
             {
                 r_LicenseNumber = i_LicenseNumber;
             }

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
 {
@@ -11,25 +6,27 @@ namespace Ex03.ConsoleUI
     {
         private const string k_ForamtError = "This is the wrong format! ";
         private const string k_ArgumenttError = "This is the wrong Argument! ";
-        private const string k_ExitMassage = "Goodbye! ";
+        private const string k_ExitMessage = "Goodbye! ";
         private readonly string r_SeparateLine = new string('~',15);
 
         public string GetLicenseNumber()
         {
             ////TODO: read from controller
-            string msgToPrint = "Please insert your license Number:";
-            DisplayMassage(msgToPrint);
-            return Console.ReadLine();
+            DisplayMessage("Please insert your license Number:");
+            return GetVar();
         }
         
-        public void DisplayMassage(string i_Msg)
+        public void DisplayMessage(string i_Msg)
         {
-            Console.Clear();
+            //Console.Clear();
             Console.WriteLine(r_SeparateLine);
             Console.WriteLine(i_Msg);
         }
 
-        
+        public void DisplayExitMessage()
+        {
+            DisplayMessage(k_ExitMessage);
+        }
 
         public string GetVar()
         {

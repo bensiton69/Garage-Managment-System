@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ex03.GarageLogic
+﻿namespace Ex03.GarageLogic
 {
     public class GarageEnums
     {
@@ -29,6 +23,7 @@ namespace Ex03.GarageLogic
         }
         public enum eUserAction
         {
+            Exit = 0,
             AddNewVehicle = 1,
             DisplayAllLicenseNumbersInGarage = 2,
             ChangeVehicleState = 3,
