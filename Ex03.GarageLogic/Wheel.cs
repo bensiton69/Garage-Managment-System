@@ -9,7 +9,18 @@
         public float CurrentAirPressure
         {
             get => m_CurrentAirPressure;
-            private set => m_CurrentAirPressure = value;
+            private set
+            {
+                //// TODO: the getvariable methot allready validate the input
+                if(value <= MaxAirPressure)
+                {
+                    m_CurrentAirPressure = value;
+                }
+                else
+                {
+                    throw new GarageExceptions.ValueOutOfRangeException(0, MaxAirPressure);
+                }
+            }
         }
 
         public float MaxAirPressure => m_MaxAirPressure;
@@ -18,6 +29,12 @@
         {
             m_ManufacturerName = i_ManufacturerName;
             m_CurrentAirPressure = i_CurrentAirPressure;
+            m_MaxAirPressure = i_MaxAirPressure;
+        }
+
+        public Wheel(string i_WheelManufacturerName, float i_MaxAirPressure)
+        {
+            m_ManufacturerName = i_WheelManufacturerName;
             m_MaxAirPressure = i_MaxAirPressure;
         }
 

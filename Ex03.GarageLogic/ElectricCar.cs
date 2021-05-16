@@ -27,5 +27,15 @@
         {
             MaxBatteryTime = 3.2f;
         }
+
+        public ElectricCar(
+            string i_ModelName,
+            string i_LicenseNumber,
+            float i_EnergyLeft,
+            string i_WheelManufacturerName)
+            : base(i_ModelName, i_LicenseNumber, i_EnergyLeft, i_WheelManufacturerName)
+        {
+            MaxBatteryTime = 3.2f;
+        }
     }
 }

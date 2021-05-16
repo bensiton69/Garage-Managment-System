@@ -52,5 +52,29 @@ namespace Ex03.GarageLogic
 
             return true;
         }
+        protected Vehicle(
+            string i_ModelName,
+            string i_LicenseNumber,
+            float i_EnergyLeft,
+            string i_WheelManufacturerName,
+            int i_NumberOfWheels,
+            float i_MaxAirPressure)
+        {
+            if (!(0 <= i_EnergyLeft) || !(i_EnergyLeft <= 100))
+            {
+                throw new GarageExceptions.ValueOutOfRangeException(0, 100);
+            }
+
+            r_ModelName = i_ModelName;
+            r_LicenseNumber = i_LicenseNumber;
+            r_EnergyLeft = i_EnergyLeft;
+            r_Wheels = new List<Wheel>();
+            Wheel wheel = new Wheel(i_WheelManufacturerName, i_MaxAirPressure);
+            for (int i = 0; i < i_NumberOfWheels; i++)
+            {
+                r_Wheels.Add(wheel);
+            }
+        }
     }
+
 }

@@ -22,5 +22,11 @@
         {
             MaxBatteryTime = 1.8f;
         }
+
+        public ElectricalMotorcycle(string i_ModelName, string i_LicenseNumber, float i_EnergyLeft, string i_WheelManufacturerName)
+            : base(i_ModelName, i_LicenseNumber, i_EnergyLeft, i_WheelManufacturerName)
+        {
+            MaxBatteryTime = 1.8f;
+        }
     }
 }

@@ -129,7 +129,6 @@ namespace Ex03.ConsoleUI
         {
             r_UserInterfaceView.DisplayMessage("ChangeVehicleState");
             string licenseNumber = r_UserInterfaceView.GetLicenseNumber();
-            //eVehicleType vehicleType = GetVehicleType();
             GarageEnums.eVehicleStatus vehicleStatus = 0;
             int userChoice = buildChoiceMenu(vehicleStatus);
             vehicleStatus = (GarageEnums.eVehicleStatus)userChoice;

@@ -49,5 +49,16 @@
             MaxAmountOfFuel = 120;
         }
 
+        public Truck(
+            string i_ModelName,
+            string i_LicenseNumber,
+            float i_EnergyLeft,
+            string i_WheelManufacturerName)
+            : base(i_ModelName, i_LicenseNumber, i_EnergyLeft, i_WheelManufacturerName, 16, 26)
+        {
+            FuelType = GarageEnums.eFuelType.Soler;
+            MaxAmountOfFuel = 120;
+        }
+
     }
 }
