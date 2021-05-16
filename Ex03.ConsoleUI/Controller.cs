@@ -223,6 +223,7 @@ status: {2}",
             GarageEnums.eVehicleType vehicleType = 0;
             vehicleType = (GarageEnums.eVehicleType)buildChoiceMenu(vehicleType);
             Vehicle vehicleToAdd = VehicleFactory.CreateVehicle(vehicleType, i_LicenseNumber, GetGeneralInfoForVehicle());
+
             (string costumerName, string costumerPhone) = GetCostumerDetails();
             if (vehicleToAdd != null)
             {
@@ -295,6 +296,13 @@ status: {2}",
             return (modelName, energyLeft, wheelManufacturerName, currentWheelPressure);
         }
 
+        public void SetWheelCurrentAirPressure(Vehicle i_VehicleToAdd)
+        {
+            float currentWheelPressure = 0;
+            r_UserInterfaceView.DisplayMessage("Please insert the current air pressure your of wheels: ");
+            getVariable(ref currentWheelPressure, k_MinIsFloatZero, i_VehicleToAdd.Wheels.Single().MaxAirPressure);
+            i_VehicleToAdd.SetWheelCurrentAirPressure(currentWheelPressure);
+        }
         public (string, string) GetCostumerDetails()
         {
             r_UserInterfaceView.DisplayMessage("Please insert Your full name: ");

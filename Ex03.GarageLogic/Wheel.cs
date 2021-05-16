@@ -9,18 +9,7 @@
         public float CurrentAirPressure
         {
             get => m_CurrentAirPressure;
-            private set
-            {
-                //// TODO: the getvariable methot allready validate the input
-                if(value <= MaxAirPressure)
-                {
-                    m_CurrentAirPressure = value;
-                }
-                else
-                {
-                    throw new GarageExceptions.ValueOutOfRangeException(0, MaxAirPressure);
-                }
-            }
+            set => m_CurrentAirPressure = value;
         }
 
         public float MaxAirPressure => m_MaxAirPressure;

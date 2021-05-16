@@ -75,6 +75,14 @@ namespace Ex03.GarageLogic
                 r_Wheels.Add(wheel);
             }
         }
+
+        public void SetWheelCurrentAirPressure(float i_CurrentWheelPressure)
+        {
+            foreach(Wheel wheel in Wheels)
+            {
+                wheel.CurrentAirPressure = i_CurrentWheelPressure;
+            }
+        }
     }
 
 }
