@@ -39,7 +39,6 @@
             Repaired = 2,
             Paid = 3
         }
-        //// TODO: move etype to Factory?
         public enum eVehicleType
         {
             ElectricalMotorcycle = 1,

@@ -9,12 +9,6 @@ namespace Ex03.ConsoleUI
         private const string k_ExitMessage = "Goodbye! ";
         private readonly string r_SeparateLine = new string('~',15);
 
-        public string GetLicenseNumber()
-        {
-            ////TODO: read from controller
-            DisplayMessage("Please insert your license Number:");
-            return GetVar();
-        }
         
         public void DisplayMessage(string i_Msg)
         {
@@ -44,14 +38,5 @@ namespace Ex03.ConsoleUI
             Console.WriteLine(k_ArgumenttError);
         }
 
-        public void DisplayEmptyGarageMessage()
-        {
-            DisplayMessage("The garage is empty!");
-        }
-
-        public void DisplayVehicleDoNotExists()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

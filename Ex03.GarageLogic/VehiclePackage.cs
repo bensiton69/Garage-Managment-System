@@ -7,7 +7,6 @@
         private Vehicle m_Vehicle;
         private GarageEnums.eVehicleStatus m_Status = GarageEnums.eVehicleStatus.InProgress;
         public GarageEnums.eVehicleStatus Status => m_Status;
-
         public void SetStatus(GarageEnums.eVehicleStatus i_VehicleStatus)
         {
             m_Status = i_VehicleStatus;
@@ -39,7 +38,6 @@
             m_OwnerPhoneNumber = i_OwnerPhoneNumber;
             m_Vehicle = i_Vehicle;
         }
-
         public (string, string, GarageEnums.eVehicleStatus) GetOwnerInfo()
         {
             return (m_OwnerFullName, m_OwnerPhoneNumber, m_Status);
