@@ -43,5 +43,15 @@ namespace Ex03.ConsoleUI
             Console.WriteLine(r_SeparateLine);
             Console.WriteLine(k_ArgumenttError);
         }
+
+        public void DisplayEmptyGarageMessage()
+        {
+            DisplayMessage("The garage is empty!");
+        }
+
+        public void DisplayVehicleDoNotExists()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

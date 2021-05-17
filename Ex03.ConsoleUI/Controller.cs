@@ -27,9 +27,16 @@ namespace Ex03.ConsoleUI
         {
             while(true)
             {
-                GarageEnums.eUserAction userInput = 0;
-                userInput = (GarageEnums.eUserAction)buildChoiceMenu(userInput);
-                startChoiceMenu(userInput);
+                try
+                {
+                    GarageEnums.eUserAction userInput = 0;
+                    userInput = (GarageEnums.eUserAction)buildChoiceMenu(userInput);
+                    startChoiceMenu(userInput);
+                }
+                catch(Exception ex)
+                {
+                    r_UserInterfaceView.DisplayMessage(ex.Message);
+                }
             }
         }
         private void exitProgram()
@@ -94,6 +101,7 @@ namespace Ex03.ConsoleUI
         }
         private void displayLicenseNumberByStatus()
         {
+            garageValidation();
             GarageEnums.eChoice sortChoice = 0;
             r_UserInterfaceView.DisplayMessage("Would you Display by status?");
             int userChoice = buildChoiceMenu(sortChoice);
@@ -117,39 +125,41 @@ namespace Ex03.ConsoleUI
             r_UserInterfaceView.DisplayMessage(stringBuilder.ToString());
 
         }
+
+
         private void changeVehicleState()
         {
+            garageValidation();
             r_UserInterfaceView.DisplayMessage("ChangeVehicleState");
             string licenseNumber = r_UserInterfaceView.GetLicenseNumber();
+            VehiclePackage vehiclePackage = null;
+            vehicleValidation(licenseNumber, ref vehiclePackage);
             GarageEnums.eVehicleStatus vehicleStatus = 0;
             int userChoice = buildChoiceMenu(vehicleStatus);
             vehicleStatus = (GarageEnums.eVehicleStatus)userChoice;
             r_UserInterfaceView.DisplayMessage(($"{vehicleStatus}"));
-            try
-            {
-                r_GarageModel.ChangeVehicleStatus(licenseNumber, vehicleStatus);
-            }
-            catch(GarageExceptions.VehicleDoNotExist vdne)
-            {
-                r_UserInterfaceView.DisplayMessage(vdne.Message);
-            }
+            r_GarageModel.ChangeVehicleStatus(vehiclePackage, vehicleStatus);
         }
         private void fillAirToMax()
         {
+            garageValidation();
             r_UserInterfaceView.DisplayMessage(("FillAirToMax"));
             string licenseNumber = r_UserInterfaceView.GetLicenseNumber();
             r_GarageModel.FillAirToMax(licenseNumber);
+
         }
         private void refuelingMotorized()
         {
+            garageValidation();
             r_UserInterfaceView.DisplayMessage("RefuelingMotorized");
             string licenseNumber = r_UserInterfaceView.GetLicenseNumber();
+            VehiclePackage vehiclePackage = null;
+            vehicleValidation(licenseNumber, ref vehiclePackage);
             GarageEnums.eFuelType fuelType = 0;
             fuelType = (GarageEnums.eFuelType)buildChoiceMenu(fuelType);
             float amountOfFuelToRefuel = 0;
             r_UserInterfaceView.DisplayMessage("insert the amount of fuel to refuel:");
             getVariable(ref amountOfFuelToRefuel);
-
             try
             {
                 r_GarageModel.FillFuelForMotorized(licenseNumber, fuelType, amountOfFuelToRefuel);
@@ -169,32 +179,34 @@ namespace Ex03.ConsoleUI
         }
         private void displayFullInfo()
         {
+            garageValidation();
             string licenseNumber = r_UserInterfaceView.GetLicenseNumber();
             VehiclePackage vehiclePackage = null;
-            if (r_GarageModel.IsLicenseNumberMatch(licenseNumber, ref vehiclePackage))
-            {
-                string ownerName;
-                string ownerPhone;
-                GarageEnums.eVehicleStatus vehicleStatus;
-                (ownerName, ownerPhone, vehicleStatus) = vehiclePackage.GetOwnerInfo();
-                string msgToPrint = string.Format(
-                    @"
+            vehicleValidation(licenseNumber, ref vehiclePackage);
+            string ownerName;
+            string ownerPhone;
+            GarageEnums.eVehicleStatus vehicleStatus;
+            (ownerName, ownerPhone, vehicleStatus) = vehiclePackage.GetOwnerInfo();
+            string msgToPrint = string.Format(
+                @"
 Client Info:
 owner name: {0}
 owner phone number: {1}
 status: {2}",
-                    ownerName,
-                    ownerPhone,
-                    vehicleStatus);
-                r_UserInterfaceView.DisplayMessage(msgToPrint);
-                vehiclePrint(vehiclePackage.Vehicle);
-            }
+                ownerName,
+                ownerPhone,
+                vehicleStatus);
+            r_UserInterfaceView.DisplayMessage(msgToPrint);
+            vehiclePrint(vehiclePackage.Vehicle);
         }
         private void chargeElectrical()
         {
+            garageValidation();
             r_UserInterfaceView.DisplayMessage("ChargeElectrical");
             
             string licenseNumber = r_UserInterfaceView.GetLicenseNumber();
+            VehiclePackage vehiclePackage = null;
+            vehicleValidation(licenseNumber, ref vehiclePackage);
             float amountOfTimeToCharge = 0;
             r_UserInterfaceView.DisplayMessage("insert the amount of Time to charge:");
             getVariable(ref amountOfTimeToCharge);
@@ -467,6 +479,21 @@ Energy left: {i_Vehicle.EnetgyLeft}.");
             stringBuilder.AppendLine();
             }
             r_UserInterfaceView.DisplayMessage(stringBuilder.ToString());
+        }
+
+        private void garageValidation()
+        {
+            if(r_GarageModel.IsEmpty() == true)
+            {
+                throw new GarageExceptions.GarageIsEmpty();
+            }
+        }
+        private void  vehicleValidation(string i_LicenseNumber, ref VehiclePackage i_VehiclePackage)
+        {
+            if(r_GarageModel.IsLicenseNumberMatch(i_LicenseNumber, ref i_VehiclePackage) == false)
+            {
+                throw new GarageExceptions.VehicleDoNotExist(i_LicenseNumber);
+            }
         }
 
     }

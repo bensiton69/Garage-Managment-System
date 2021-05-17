@@ -8,7 +8,11 @@ namespace Ex03.GarageLogic
 {
     public class GarageManagement
     {
+        //// TODO:
+        //// 1. Actions on empty garage
+        //// 2. Action on vehicle which not exists
         private readonly List<VehiclePackage> r_VehiclesList = new List<VehiclePackage>();
+        public VehiclePackage CurrentCustomer { get; private set; }
         public List<VehiclePackage> Vehicles
         {
             get
@@ -16,51 +20,13 @@ namespace Ex03.GarageLogic
                 return r_VehiclesList;
             }
         }
-        public VehiclePackage CurrentCustomer { get; private set; }
-
-        public bool AddNewCar(string i_OwnerFullName, string i_OwnerPhoneNumber, Vehicle i_Vehicle)
-        {
-            VehiclePackage vehiclePackageToAdd = new VehiclePackage(
-                i_OwnerFullName,
-                i_OwnerPhoneNumber,
-                i_Vehicle);
-            r_VehiclesList.Add(vehiclePackageToAdd);
-            return true;
-        }
-
-        public bool IsLicenseNumberMatch(string i_LicenseNumberToCheck, ref VehiclePackage i_VehiclePackage)
-        {
-            bool isMatch = false;
-            foreach (VehiclePackage vehiclePackage in Vehicles)
-            {
-                if (i_LicenseNumberToCheck == vehiclePackage.Vehicle.LicenseNumber)
-                {
-                    isMatch = true;
-                    CurrentCustomer = vehiclePackage;
-                    i_VehiclePackage = vehiclePackage;
-                    break;
-                }
-            }
-
-            return isMatch;
-        }
-
         public List<VehiclePackage> GetVehicleByStatus()
         {
+            //// TODO: why new?
             List<VehiclePackage> sortedList = new List<VehiclePackage>();
             sortedList = r_VehiclesList.OrderBy(vehiclePackage => vehiclePackage.Status).ToList();
             return sortedList;
         }
-
-        public bool FillAirToMax(string i_LicenseNumber)
-        {
-            VehiclePackage vehiclePackage = null;
-            IsLicenseNumberMatch(i_LicenseNumber, ref vehiclePackage);
-            vehiclePackage.Vehicle.FillAirToMax();
-            return false;
-        }
-
-
         public void ChargeElectricVehicle(string i_LicenseNumber, float i_AmountOfTimeToCharge)
         {
             VehiclePackage vehiclePackage = null;
@@ -77,7 +43,6 @@ namespace Ex03.GarageLogic
                 throw new GarageExceptions.ValueOutOfRangeException(minTimeToCharge, maxBatteryTime);
             }
         }
-
         public void ChangeVehicleStatus(string i_LicenseNumber, GarageEnums.eVehicleStatus i_VehicleStatus)
         {
             VehiclePackage vehiclePackage = null;
@@ -91,7 +56,6 @@ namespace Ex03.GarageLogic
                 throw new GarageExceptions.VehicleDoNotExist(i_LicenseNumber);
             }
         }
-
         public void FillFuelForMotorized(string i_LicenseNumber, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
         {
             VehiclePackage vehiclePackage = null;
@@ -116,23 +80,72 @@ namespace Ex03.GarageLogic
             }
             (vehiclePackage.Vehicle as IMotorized)?.FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
         }
-        private void validateVehicle(string i_LicenseNumber)
+        public bool IsEmpty()
+        {
+            bool isEmpty = true;
+            if(r_VehiclesList.Count != 0)
+            {
+                isEmpty = false;
+            }
+
+            return isEmpty;
+        }
+        public bool AddNewCar(string i_OwnerFullName, string i_OwnerPhoneNumber, Vehicle i_Vehicle)
+        {
+            VehiclePackage vehiclePackageToAdd = new VehiclePackage(
+                i_OwnerFullName,
+                i_OwnerPhoneNumber,
+                i_Vehicle);
+            r_VehiclesList.Add(vehiclePackageToAdd);
+            return true;
+        }
+        public bool IsLicenseNumberMatch(string i_LicenseNumberToCheck)
         {
             bool isMatch = false;
             foreach (VehiclePackage vehiclePackage in Vehicles)
             {
-                if (i_LicenseNumber == vehiclePackage.Vehicle.LicenseNumber)
+                if (i_LicenseNumberToCheck == vehiclePackage.Vehicle.LicenseNumber)
                 {
                     isMatch = true;
                     CurrentCustomer = vehiclePackage;
                     break;
                 }
             }
-            if(isMatch == false)
+
+            return isMatch;
+        }
+        public bool IsLicenseNumberMatch(string i_LicenseNumberToCheck, ref VehiclePackage i_VehiclePackage)
+        {
+            bool isMatch = false;
+            foreach (VehiclePackage vehiclePackage in Vehicles)
+            {
+                if (i_LicenseNumberToCheck == vehiclePackage.Vehicle.LicenseNumber)
+                {
+                    isMatch = true;
+                    CurrentCustomer = vehiclePackage;
+                    i_VehiclePackage = vehiclePackage;
+                    break;
+                }
+            }
+
+            return isMatch;
+        }
+        public bool FillAirToMax(string i_LicenseNumber)
+        {
+            VehiclePackage vehiclePackage = null;
+            if(IsLicenseNumberMatch(i_LicenseNumber, ref vehiclePackage) == false)
             {
                 throw new GarageExceptions.VehicleDoNotExist(i_LicenseNumber);
             }
+            vehiclePackage.Vehicle.FillAirToMax();
+            return false;
         }
+
+        public void ChangeVehicleStatus(VehiclePackage i_VehiclePackage, GarageEnums.eVehicleStatus i_VehicleStatus)
+        {
+            i_VehiclePackage.SetStatus(i_VehicleStatus);
+        }
+
 
     }
 }

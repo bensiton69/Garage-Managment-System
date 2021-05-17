@@ -27,5 +27,13 @@ namespace Ex03.GarageLogic
                 r_LicenseNumber = i_LicenseNumber;
             }
         }
+
+        public class GarageIsEmpty : Exception
+        {
+            public GarageIsEmpty()
+                : base("The garage is empty!")
+            {
+            }
+        }
     }
 }
