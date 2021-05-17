@@ -116,6 +116,23 @@ namespace Ex03.GarageLogic
             }
             (vehiclePackage.Vehicle as IMotorized)?.FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
         }
+        private void validateVehicle(string i_LicenseNumber)
+        {
+            bool isMatch = false;
+            foreach (VehiclePackage vehiclePackage in Vehicles)
+            {
+                if (i_LicenseNumber == vehiclePackage.Vehicle.LicenseNumber)
+                {
+                    isMatch = true;
+                    CurrentCustomer = vehiclePackage;
+                    break;
+                }
+            }
+            if(isMatch == false)
+            {
+                throw new GarageExceptions.VehicleDoNotExist(i_LicenseNumber);
+            }
+        }
 
     }
 }

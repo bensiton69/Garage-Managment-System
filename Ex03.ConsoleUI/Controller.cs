@@ -11,26 +11,18 @@ namespace Ex03.ConsoleUI
     {
         private readonly GarageManagement r_GarageModel;
         private readonly UserInterface r_UserInterfaceView;
-        private const int k_MinLengthForFullName = 2;
-        private const int k_MaxLengthForFullName = 18;
+        private const int k_MinLengthForNames = 2;
+        private const int k_MaxLengthForNames = 25;
         private const int k_MinLengthForPhoneNumber = 6;
         private const int k_MaxLengthForPhoneNumber = 10;
         private const float k_MinIsFloatZero = 0;
-        private const float k_MinAmountOfFuel = 0;
         private const float k_MaxValForTruckCarry = 99999;
-        private const float k_MinValForTruckCarry = 0;
-        private const float k_MinValForAirPressure = 0;
-        private const float k_MaxValForMotorcycleAirPressure = 30;
-        private const float k_MaxValForCarAirPressure = 32;
-        private const float k_MaxValForTruckAirPressure = 32;
-
 
         public Controller()
         {
             r_GarageModel = new GarageManagement();
             r_UserInterfaceView = new UserInterface();
         }
-
         public void Entry()
         {
             while(true)
@@ -40,7 +32,11 @@ namespace Ex03.ConsoleUI
                 startChoiceMenu(userInput);
             }
         }
-
+        private void exitProgram()
+        {
+            r_UserInterfaceView.DisplayExitMessage();
+            Environment.Exit(0);
+        }
         private void startChoiceMenu(GarageEnums.eUserAction i_UserInput)
         {
             switch (i_UserInput)
@@ -71,13 +67,6 @@ namespace Ex03.ConsoleUI
                     break;
             }
         }
-
-        private void exitProgram()
-        {
-            r_UserInterfaceView.DisplayExitMessage();
-            Environment.Exit(0);
-        }
-
         private void addNewVehicleToGarage()
         {
             r_UserInterfaceView.DisplayMessage("Add new vehicle");
@@ -85,21 +74,24 @@ namespace Ex03.ConsoleUI
             VehiclePackage vehiclePackage = null;
             if (r_GarageModel.IsLicenseNumberMatch(licenseNumber,ref vehiclePackage) == false)
             {
-                addNewVehicleToGarage(licenseNumber);
+                createVehicle(licenseNumber);
             }
             else
             {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("This vehicle belong to: ");
-                stringBuilder.AppendLine();
-                stringBuilder.Append($"Name: {vehiclePackage.OwnerFullName}");
-                stringBuilder.AppendLine();
-                stringBuilder.Append($"Status: {vehiclePackage.Status}");
-                r_UserInterfaceView.DisplayMessage(stringBuilder.ToString());
+                displayVehicle(vehiclePackage);
             }
 
         }
-
+        private void displayVehicle(VehiclePackage i_VehiclePackage)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("This vehicle belong to: ");
+            stringBuilder.AppendLine();
+            stringBuilder.Append($"Name: {i_VehiclePackage.OwnerFullName}");
+            stringBuilder.AppendLine();
+            stringBuilder.Append($"Status: {i_VehiclePackage.Status}");
+            r_UserInterfaceView.DisplayMessage(stringBuilder.ToString());
+        }
         private void displayLicenseNumberByStatus()
         {
             GarageEnums.eChoice sortChoice = 0;
@@ -174,7 +166,6 @@ namespace Ex03.ConsoleUI
             {
                 r_UserInterfaceView.DisplayMessage(vdne.Message);
             }
-            //r_GarageModel.FillFuelForMotorized(licenseNumber, fuelType, amountOfFuelToRefuel);
         }
         private void displayFullInfo()
         {
@@ -196,10 +187,9 @@ status: {2}",
                     ownerPhone,
                     vehicleStatus);
                 r_UserInterfaceView.DisplayMessage(msgToPrint);
-                VehiclePrint(vehiclePackage.Vehicle);
+                vehiclePrint(vehiclePackage.Vehicle);
             }
         }
-
         private void chargeElectrical()
         {
             r_UserInterfaceView.DisplayMessage("ChargeElectrical");
@@ -217,52 +207,43 @@ status: {2}",
                 r_UserInterfaceView.DisplayMessage(voore.Message);
             }
         }
-        private bool addNewVehicleToGarage(string i_LicenseNumber)
+        private void createVehicle(string i_LicenseNumber)
         {
-            bool valToReturn = false;
-            GarageEnums.eVehicleType vehicleType = 0;
-            vehicleType = (GarageEnums.eVehicleType)buildChoiceMenu(vehicleType);
-            Vehicle vehicleToAdd = VehicleFactory.CreateVehicle(vehicleType, i_LicenseNumber, GetGeneralInfoForVehicle());
-
-            (string costumerName, string costumerPhone) = GetCostumerDetails();
-            if (vehicleToAdd != null)
+        GarageEnums.eVehicleType vehicleType = 0;
+        vehicleType = (GarageEnums.eVehicleType)buildChoiceMenu(vehicleType);
+        Vehicle vehicleToAdd = VehicleFactory.CreateVehicle(vehicleType, i_LicenseNumber, getGeneralInfoForVehicle());
+        setWheelCurrentAirPressure(vehicleToAdd);
+        (string costumerName, string costumerPhone) = getCostumerDetails();
+            if (vehicleToAdd is Car)
             {
-                r_UserInterfaceView.DisplayMessage($"The type of Vehicle is {vehicleToAdd.GetType()}");
-                if (vehicleToAdd is Car)
-                {
-                    setCarFields(vehicleToAdd);
-                }
-                if (vehicleToAdd is Motorcycle)
-                {
-                    setMotorcycleFields(vehicleToAdd);
-                }
-                if (vehicleToAdd is IElectrical)
-                {
-                    setElectricalFields(vehicleToAdd);
-                }
-                if (vehicleToAdd is IMotorized)
-                {
-                    setMotorizedFields(vehicleToAdd);
-                }
-
-                if(vehicleToAdd is Truck)
-                {
-                    setTruckFields(vehicleToAdd);
-                }
-                r_GarageModel.AddNewCar(costumerName, costumerPhone, vehicleToAdd);
-                valToReturn = true;
+                setCarFields(vehicleToAdd);
             }
-            return valToReturn;
+            if (vehicleToAdd is Motorcycle)
+            {
+                setMotorcycleFields(vehicleToAdd);
+            }
+            if (vehicleToAdd is IElectrical)
+            {
+                setElectricalFields(vehicleToAdd);
+            }
+            if (vehicleToAdd is IMotorized)
+            {
+                setMotorizedFields(vehicleToAdd);
+            }
+            if(vehicleToAdd is Truck)
+            {
+                setTruckFields(vehicleToAdd);
+            }
+            r_GarageModel.AddNewCar(costumerName, costumerPhone, vehicleToAdd);
         }
         private void setMotorizedFields(Vehicle i_VehicleToAdd)
         {
             r_UserInterfaceView.DisplayMessage(($"What is The current amount of fuel in your vehicle?"));
             float currentAmountOfFuel = 0;
             float maxAmountOfFuel = (i_VehicleToAdd as IMotorized).MaxAmountOfFuel;
-            getVariable(ref currentAmountOfFuel, k_MinAmountOfFuel, maxAmountOfFuel);
+            getVariable(ref currentAmountOfFuel, k_MinIsFloatZero, maxAmountOfFuel);
             (i_VehicleToAdd as IMotorized)?.AddMotorizedFields(currentAmountOfFuel);
         }
-
         private void setTruckFields(Vehicle i_VehicleToAdd)
         {
             GarageEnums.eChoice isDangerChoice = 0;
@@ -276,38 +257,35 @@ status: {2}",
                 isDanger = true;
             }
             r_UserInterfaceView.DisplayMessage("What is the max weight to carry?");
-            getVariable(ref maxWeight, k_MinValForTruckCarry,k_MaxValForTruckCarry);
-            (i_VehicleToAdd as Truck).AddTruckFields(isDanger,maxWeight);
+            getVariable(ref maxWeight, k_MinIsFloatZero,k_MaxValForTruckCarry);
+            (i_VehicleToAdd as Truck)?.AddTruckFields(isDanger,maxWeight);
         }
-        public (string modelName, float energyLeft, string wheelManufacturerName, float currentWheelPressure) GetGeneralInfoForVehicle()
+        private (string modelName, float energyLeft, string wheelManufacturerName) getGeneralInfoForVehicle()
         {
             string modelName = null;
             string wheelManufacturerName = null;
             float energyLeft = 0;
-            float currentWheelPressure = 0;
             r_UserInterfaceView.DisplayMessage("Please insert the Model Name for your vehicle: ");
-            getVariable(ref modelName, k_MinLengthForFullName, k_MaxLengthForFullName);
+            getVariable(ref modelName, k_MinLengthForNames, k_MaxLengthForNames);
             r_UserInterfaceView.DisplayMessage("Please insert the energy left for your vehicle: ");
             getVariable(ref energyLeft, 0 ,100);
             r_UserInterfaceView.DisplayMessage("Please insert the Manufacturer Name your of wheels: ");
-            getVariable(ref wheelManufacturerName, k_MinLengthForFullName, k_MaxLengthForFullName);
-            r_UserInterfaceView.DisplayMessage("Please insert the current air pressure your of wheels: ");
-            getVariable(ref currentWheelPressure);
-            return (modelName, energyLeft, wheelManufacturerName, currentWheelPressure);
+            getVariable(ref wheelManufacturerName, k_MinLengthForNames, k_MaxLengthForNames);
+            return (modelName, energyLeft, wheelManufacturerName);
         }
-
-        public void SetWheelCurrentAirPressure(Vehicle i_VehicleToAdd)
+        private void setWheelCurrentAirPressure(Vehicle i_VehicleToAdd)
         {
             float currentWheelPressure = 0;
+            float max = i_VehicleToAdd.Wheels.FirstOrDefault().MaxAirPressure;
             r_UserInterfaceView.DisplayMessage("Please insert the current air pressure your of wheels: ");
-            getVariable(ref currentWheelPressure, k_MinIsFloatZero, i_VehicleToAdd.Wheels.Single().MaxAirPressure);
+            getVariable(ref currentWheelPressure, k_MinIsFloatZero, max);
             i_VehicleToAdd.SetWheelCurrentAirPressure(currentWheelPressure);
         }
-        public (string, string) GetCostumerDetails()
+        private (string, string) getCostumerDetails()
         {
             r_UserInterfaceView.DisplayMessage("Please insert Your full name: ");
             string fullName = null;
-            getVariable(ref fullName, k_MinLengthForFullName, k_MaxLengthForFullName);
+            getVariable(ref fullName, k_MinLengthForNames, k_MaxLengthForNames);
             r_UserInterfaceView.DisplayMessage("Please insert Your phone number: ");
             string phoneNumber = null;
             getVariable(ref phoneNumber, k_MinLengthForPhoneNumber, k_MaxLengthForPhoneNumber);
@@ -322,7 +300,6 @@ status: {2}",
             getVariable(ref batteryTimeLeft, k_MinIsFloatZero, maxTime);
             (i_VehicleToAdd as IElectrical)?.AddElectricalFields(batteryTimeLeft);
         }
-
         private void setMotorcycleFields(Vehicle i_VehicleToAdd)
         {
             GarageEnums.eLicenseType licenseType = 0;
@@ -333,7 +310,6 @@ status: {2}",
             getVariable(ref motorcycleVolume);
             (i_VehicleToAdd as Motorcycle)?.AddMotorcycleFields(licenseType, motorcycleVolume);
         }
-
         private void setCarFields(Vehicle i_VehicleToAdd)
         {
             GarageEnums.eColor color = 0;
@@ -344,7 +320,6 @@ status: {2}",
             numberOfDoor = (GarageEnums.eNumberOfDoor)buildChoiceMenu(numberOfDoor);
             (i_VehicleToAdd as Car)?.AddCarFields(color, numberOfDoor);
         }
-
         private void getVariable<T>(ref T i_Param)
         {
             bool isValid = false;
@@ -381,7 +356,6 @@ status: {2}",
                 }
             }
         }
-
         private void getVariable(ref float i_FloatToInitialize, float i_MinVal, float i_MaxVal)
         {
             bool isValid = false;
@@ -389,6 +363,25 @@ status: {2}",
             {
                 getVariable(ref i_FloatToInitialize);
                 if(i_MinVal <= i_FloatToInitialize && i_FloatToInitialize <= i_MaxVal)
+                {
+                    isValid = true;
+                }
+                else
+                {
+                    //// input is not valid
+                    GarageExceptions.ValueOutOfRangeException voore =
+                        new GarageExceptions.ValueOutOfRangeException(i_MinVal, i_MaxVal);
+                    r_UserInterfaceView.DisplayMessage(voore.Message);
+                }
+            }
+        }
+        private void getVariable(ref int i_IntToInitialize, int i_MinVal, int i_MaxVal)
+        {
+            bool isValid = false;
+            while (isValid == false)
+            {
+                getVariable(ref i_IntToInitialize);
+                if (i_MinVal <= i_IntToInitialize && i_IntToInitialize <= i_MaxVal)
                 {
                     isValid = true;
                 }
@@ -410,17 +403,13 @@ status: {2}",
                 stringBuilder.AppendLine();
             }
             r_UserInterfaceView.DisplayMessage(stringBuilder.ToString());
-            //// TODO: Code duplication!!
-            bool isInputValid = false;
-            string userInput = null;
-            while (isInputValid == false)
-            {
-                getVariable(ref userInput);
-                isInputValid = genericEnumValidation(typeof(T), userInput);
-            }
-            return int.Parse(userInput);
+            int userInput = 0;
+            int maxVal = Enum.GetValues(typeof(T)).Cast<int>().Max();
+            int minVal = Enum.GetValues(typeof(T)).Cast<int>().Min();
+            getVariable(ref userInput,minVal,maxVal);
+            return userInput;
         }
-        public void VehiclePrint(Vehicle i_Vehicle)
+        private void vehiclePrint(Vehicle i_Vehicle)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append(
@@ -479,56 +468,6 @@ Energy left: {i_Vehicle.EnetgyLeft}.");
             }
             r_UserInterfaceView.DisplayMessage(stringBuilder.ToString());
         }
-        private bool genericEnumValidation(Type i_Type, string i_UserInput)
-        {
-            bool isValid = false;
-            try
-            {
-                int maxVal = Enum.GetValues(i_Type).Cast<int>().Max();
-                int minVal = Enum.GetValues(i_Type).Cast<int>().Min();
-                int enumIntVal = Int32.Parse(i_UserInput);
-                isValid = minVal <= enumIntVal && enumIntVal <= maxVal;
-            }
-            catch(FormatException)
-            {
-                r_UserInterfaceView.DisplayFormatError();
-            }
-            return isValid;
-        }
 
-        private void GetWheel(GarageEnums.eVehicleType i_VehicleType)
-        {
-            string wheelManufacturerName = null;
-            float currentWheelPressure = 0;
-            float MaxValOfAirPressure;
-            int numOfWheels;
-            switch(i_VehicleType)
-            {
-                case GarageEnums.eVehicleType.ElectricalCar:
-                    MaxValOfAirPressure = 32;
-                    numOfWheels = 4;
-                    break;
-                case GarageEnums.eVehicleType.MotorizedCar:
-                    MaxValOfAirPressure = 32;
-                    numOfWheels = 4;
-                    break;
-                case GarageEnums.eVehicleType.ElectricalMotorcycle:
-                    MaxValOfAirPressure = 30;
-                    numOfWheels = 2;
-                    break;
-                case GarageEnums.eVehicleType.MotorizedMotorcycle:
-                    MaxValOfAirPressure = 30;
-                    numOfWheels = 2;
-                    break;
-                case GarageEnums.eVehicleType.Truck:
-                    MaxValOfAirPressure = 26;
-                    numOfWheels = 16;
-                    break;
-            }
-            r_UserInterfaceView.DisplayMessage("Please insert the Model Name for your vehicle: ");
-            getVariable(ref wheelManufacturerName, k_MinLengthForFullName, k_MaxLengthForFullName);
-            r_UserInterfaceView.DisplayMessage("Please insert the current air pressure your of wheels: ");
-            getVariable(ref currentWheelPressure);
-        }
     }
 }
