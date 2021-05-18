@@ -11,18 +11,7 @@ namespace Ex03.GarageLogic
         private GarageEnums.eNumberOfDoor m_NumberOfDoor;
         public GarageEnums.eColor Color => m_Color;
         public GarageEnums.eNumberOfDoor NumberOfDoors => m_NumberOfDoor;
-
-        public Car(
-            string i_ModelName,
-            string i_LicenseNumber,
-            float i_EnergyLeft,
-            string i_WheelManufacturerName,
-            float i_CurrentAirPressure)
-            : base(i_ModelName, i_LicenseNumber, i_EnergyLeft, i_WheelManufacturerName, i_CurrentAirPressure,4,32)
-        {
-
-        }
-
+       
         public Car(
             string i_ModelName,
             string i_LicenseNumber,

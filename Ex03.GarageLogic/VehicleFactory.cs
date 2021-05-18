@@ -10,7 +10,6 @@
             Vehicle vehicle = null;
             string modelName;
             float energyLeft;
-            float currentAirPressure;
             string wheelManufacturerName;
             (modelName, energyLeft, wheelManufacturerName) = i_GetGeneralInfoForVehicle;
             switch (i_VehicleType)

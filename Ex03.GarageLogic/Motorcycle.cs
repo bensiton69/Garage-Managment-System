@@ -12,16 +12,6 @@
             string i_ModelName,
             string i_LicenseNumber,
             float i_EnergyLeft,
-            string i_WheelManufacturerName,
-            float i_CurrentAirPressure)
-            : base(i_ModelName, i_LicenseNumber, i_EnergyLeft, i_WheelManufacturerName, i_CurrentAirPressure, 2, 30)
-        {
-
-        }
-        public Motorcycle(
-            string i_ModelName,
-            string i_LicenseNumber,
-            float i_EnergyLeft,
             string i_WheelManufacturerName)
             : base(i_ModelName, i_LicenseNumber, i_EnergyLeft, i_WheelManufacturerName, 2, 30)
         {

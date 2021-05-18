@@ -8,38 +8,27 @@ namespace FactoryMethodDesignPatternInCSharp
 {
     class Program
     {
-        static void Main()
+        public static void Main()
         {
-            CardFactory factory = null;
-            Console.Write("Enter the card type you would like to visit: ");
-            string car = Console.ReadLine();
+            float? nullFloat = null;
+            DoSomething(ref nullFloat);
+            float myFloat = nullFloat?? new float();
+            DoSomrthingWithFloat(myFloat);
+        }
 
-            switch (car.ToLower())
-            {
-                case "moneyback":
-                    factory = new MoneyBackFactory(50000, 0);
-                    break;
-                case "titanium":
-                    factory = new TitaniumFactory(100000, 500);
-                    break;
-                case "platinum":
-                    factory = new PlatinumFactory(500000, 1000);
-                    break;
-                default:
-                    break;
-            }
+        private static void dosmothing()
+        {
+            throw new NotImplementedException();
+        }
 
-            CreditCard creditCard = factory.GetCreditCard();
-            Console.WriteLine("\nYour card details are below : \n");
-            Console.WriteLine("Card Type: {0}\nCredit Limit: {1}\nAnnual Charge: {2}",
-                creditCard.CardType, creditCard.CreditLimit, creditCard.AnnualCharge);
-            Console.ReadKey();
-            factory = new MoneyBackFactory(350,0);
-            CreditCard creditCard2 = factory.GetCreditCard();
-            Console.WriteLine("\nYour card details are below : \n");
-            Console.WriteLine("Card Type: {0}\nCredit Limit: {1}\nAnnual Charge: {2}",
-                creditCard2.CardType, creditCard2.CreditLimit, creditCard2.AnnualCharge);
-            Console.ReadKey();
+        public static void DoSomrthingWithFloat(float i_NullFloat)
+        {
+            Console.WriteLine(i_NullFloat.GetType());
+        }
+
+        public static void DoSomething(ref float? i_Float)
+        {
+            Console.WriteLine(i_Float.GetType());
         }
     }
 }

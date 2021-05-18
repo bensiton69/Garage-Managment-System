@@ -12,7 +12,6 @@ namespace Ex03.ConsoleUI
         
         public void DisplayMessage(string i_Msg)
         {
-            //Console.Clear();
             Console.WriteLine(r_SeparateLine);
             Console.WriteLine(i_Msg);
         }
@@ -38,5 +37,9 @@ namespace Ex03.ConsoleUI
             Console.WriteLine(k_ArgumenttError);
         }
 
+        public void ClearScreen()
+        {
+            Console.Clear();
+        }
     }
 }

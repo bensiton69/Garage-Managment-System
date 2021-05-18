@@ -7,8 +7,11 @@ namespace Ex03.ConsoleUI
     {
         public static void Main()
         {
+            float? ben = null;
+            DoSomething(ref ben);
+            Console.WriteLine(ben);
             Controller controller = new Controller();
-            controller.Entry();
+            //controller.Entry();
             /*            GarageManagement garageManagement = new GarageManagement();
                         Vehicle vehicle = new ElectricCar(
                             "Tesla 2020",
@@ -21,7 +24,13 @@ namespace Ex03.ConsoleUI
                         garageManagement.AddNewCar("Elon Mask", "050-333-2127", vehicle);
                         TypeValiation(vehicle, typeof(IMotorized));*/
         }
-/*        private static void TypeValiation<T>(Vehicle i_VehiclePackageVehicle, T i_Param)
+
+        private static void DoSomething(ref float? i_Ben)
+        {
+            
+        }
+
+        /*        private static void TypeValiation<T>(Vehicle i_VehiclePackageVehicle, T i_Param)
         {
             
             if (i_VehiclePackageVehicle is i_Param)
@@ -37,7 +46,8 @@ namespace Ex03.ConsoleUI
                 90,
                 "Tesla",
                 25);
-            (vehicle as IElectrical).BatteryTimeLeft = 2;
+            (vehicle as 
+        ).BatteryTimeLeft = 2;
             (vehicle as Car).AddCarFields(GarageEnums.eColor.Black, GarageEnums.eNumberOfDoor.Three);
             i_GarageManagement.AddNewCar("Elon Mask", "050-333-2127", vehicle);
 

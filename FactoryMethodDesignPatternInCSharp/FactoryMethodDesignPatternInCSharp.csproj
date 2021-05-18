@@ -36,15 +36,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardFactory.cs" />
-    <Compile Include="CreditCard.cs" />
-    <Compile Include="MoneyBackCreditCard.cs" />
-    <Compile Include="MoneyBackFactory.cs" />
-    <Compile Include="PlatinumCreditCard.cs" />
-    <Compile Include="PlatinumFactory.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="TitaniumCreditCard.cs" />
-    <Compile Include="TitaniumFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

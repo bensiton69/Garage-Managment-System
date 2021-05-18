@@ -14,6 +14,12 @@ namespace Ex03.GarageLogic
         //// 3. dont use direct cast
         //// 4. io_ instead of i_ where ref
         //// 5. move eVehicleType to Factory?
+        //// 6. struct or class?
+        //// 7. from int to byte?
+        //// 8. user name only contain letters
+        //// 9. add success msg
+        //// 10. add msg how to use int in choice menu
+        //// 11. when charging motorized the message is ?
 
         private readonly List<VehiclePackage> r_VehiclesList = new List<VehiclePackage>();
         public VehiclePackage CurrentCustomer { get; private set; }
@@ -78,29 +84,29 @@ namespace Ex03.GarageLogic
             {
                 throw new ArgumentException("You can not fuel this vehicle!");
             }
-            float currentAmountOfFuel = ((IMotorized)i_Vehicle).CurrentAmountOfFuel;
-            float maxAmountToRefuel = ((IMotorized)i_Vehicle).MaxAmountOfFuel - currentAmountOfFuel;
+            float currentAmountOfFuel = (i_Vehicle as IMotorized).CurrentAmountOfFuel;
+            float maxAmountToRefuel = (i_Vehicle as IMotorized).MaxAmountOfFuel - currentAmountOfFuel;
             if (!(i_AmountOfFuelToRefuel <= maxAmountToRefuel))
             {
                 throw new GarageExceptions.ValueOutOfRangeException(0, maxAmountToRefuel);
             }
-            if (i_FuelType != ((IMotorized)i_Vehicle).FuelType)
+            if (i_FuelType != (i_Vehicle as IMotorized).FuelType)
             {
                 throw new ArgumentException("Wrong fuel type!");
             }
-            (i_Vehicle as IMotorized)?.FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
+            (i_Vehicle as IMotorized).FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
         }
         public void ChargeElectricVehicle(Vehicle i_Vehicle, float i_AmountOfTimeToCharge)
         {
             if (!(i_Vehicle is IElectrical))
             {
-                if (!(i_Vehicle is IMotorized))
+                if (!(i_Vehicle is IElectrical))
                 {
                     throw new ArgumentException("You can not Charge this vehicle!");
                 }
             }
-            float currentAmountOfTime = ((IElectrical)i_Vehicle).BatteryTimeLeft;
-            float maxBatteryTime = ((IElectrical)i_Vehicle).MaxBatteryTime - currentAmountOfTime;
+            float currentAmountOfTime = (i_Vehicle as IElectrical).BatteryTimeLeft;
+            float maxBatteryTime = (i_Vehicle as IElectrical).MaxBatteryTime - currentAmountOfTime;
             float minTimeToCharge = 0;
             if (i_AmountOfTimeToCharge <= maxBatteryTime)
             {
@@ -132,7 +138,6 @@ status: {2}",
             stringBuilder.Append(
                 $@"
 Vehicle Info:
-Vehicle Type: {vehicle.GetType()}
 Model name: {vehicle.ModelName}.
 License number: {vehicle.LicenseNumber}.
 Energy left: {vehicle.EnetgyLeft}.");
@@ -185,6 +190,8 @@ Energy left: {vehicle.EnetgyLeft}.");
                 stringBuilder.AppendLine();
             }
 
+            stringBuilder.Append($"Vehicle Type: { vehicle.GetType()}");
+            stringBuilder.AppendLine();
             return stringBuilder.ToString();
         }
     }

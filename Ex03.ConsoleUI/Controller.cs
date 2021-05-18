@@ -33,9 +33,10 @@ namespace Ex03.ConsoleUI
                 {
                     GarageEnums.eUserAction userInput = 0;
                     userInput = (GarageEnums.eUserAction)buildChoiceMenu(userInput);
+                    r_UserInterfaceView.ClearScreen();
                     startChoiceMenu(userInput);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     r_UserInterfaceView.DisplayMessage(ex.Message);
                 }
@@ -287,14 +288,14 @@ namespace Ex03.ConsoleUI
 
 
         
-        private void getVariable<T>(ref T i_Param)
+        private void getVariable<T>(ref T io_Param)
         {
             bool isValid = false;
             while(isValid == false)
             {
                 try
                 {
-                    i_Param = (T)Convert.ChangeType(r_UserInterfaceView.GetVar(), typeof(T));
+                    io_Param = (T)Convert.ChangeType(r_UserInterfaceView.GetVar(), typeof(T));
                     isValid = true;
                 }
                 catch(FormatException)
@@ -303,13 +304,13 @@ namespace Ex03.ConsoleUI
                 }
             }
         }
-        private void getVariable(ref string i_StringToInitialize,int i_MinLength, int i_MaxLength)
+        private void getVariable(ref string io_StringToInitialize,int i_MinLength, int i_MaxLength)
         {
             bool isValid = false;
             while(isValid == false)
             {
-                getVariable(ref i_StringToInitialize);
-                int lengthOfString = i_StringToInitialize.Length;
+                getVariable(ref io_StringToInitialize);
+                int lengthOfString = io_StringToInitialize.Length;
                 if(i_MinLength <= lengthOfString && lengthOfString <= i_MaxLength)
                 {
                     isValid = true;
@@ -323,13 +324,13 @@ namespace Ex03.ConsoleUI
                 }
             }
         }
-        private void getVariable(ref float i_FloatToInitialize, float i_MinVal, float i_MaxVal)
+        private void getVariable(ref float io_FloatToInitialize, float i_MinVal, float i_MaxVal)
         {
             bool isValid = false;
             while (isValid == false)
             {
-                getVariable(ref i_FloatToInitialize);
-                if(i_MinVal <= i_FloatToInitialize && i_FloatToInitialize <= i_MaxVal)
+                getVariable(ref io_FloatToInitialize);
+                if(i_MinVal <= io_FloatToInitialize && io_FloatToInitialize <= i_MaxVal)
                 {
                     isValid = true;
                 }
@@ -342,13 +343,13 @@ namespace Ex03.ConsoleUI
                 }
             }
         }
-        private void getVariable(ref int i_IntToInitialize, int i_MinVal, int i_MaxVal)
+        private void getVariable(ref int io_IntToInitialize, int i_MinVal, int i_MaxVal)
         {
             bool isValid = false;
             while (isValid == false)
             {
-                getVariable(ref i_IntToInitialize);
-                if (i_MinVal <= i_IntToInitialize && i_IntToInitialize <= i_MaxVal)
+                getVariable(ref io_IntToInitialize);
+                if (i_MinVal <= io_IntToInitialize && io_IntToInitialize <= i_MaxVal)
                 {
                     isValid = true;
                 }
@@ -360,6 +361,8 @@ namespace Ex03.ConsoleUI
                 }
             }
         }
+
+
         private string getLicenseNumber()
         {
             r_UserInterfaceView.DisplayMessage("Please insert your license Number:");
