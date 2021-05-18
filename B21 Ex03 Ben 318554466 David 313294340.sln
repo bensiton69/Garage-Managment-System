@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex03.GarageLogic", "Ex03.Ga
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex03.ConsoleUI", "Ex03.ConsoleUI\Ex03.ConsoleUI.csproj", "{5256E160-405E-43BD-A067-71BE45C5DDCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FactoryMethodDesignPatternInCSharp", "FactoryMethodDesignPatternInCSharp\FactoryMethodDesignPatternInCSharp.csproj", "{A1C3E149-86AB-4D01-AB70-5E60AFA94FEA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{5256E160-405E-43BD-A067-71BE45C5DDCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5256E160-405E-43BD-A067-71BE45C5DDCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5256E160-405E-43BD-A067-71BE45C5DDCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A1C3E149-86AB-4D01-AB70-5E60AFA94FEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1C3E149-86AB-4D01-AB70-5E60AFA94FEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1C3E149-86AB-4D01-AB70-5E60AFA94FEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1C3E149-86AB-4D01-AB70-5E60AFA94FEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

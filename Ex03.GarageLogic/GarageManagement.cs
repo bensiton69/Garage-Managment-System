@@ -18,8 +18,7 @@ namespace Ex03.GarageLogic
         //// 7. from int to byte?
         //// 8. user name only contain letters
         //// 9. add success msg
-        //// 10. add msg how to use int in choice menu
-        //// 11. when charging motorized the message is ?
+        //// 10. 
 
         private readonly List<VehiclePackage> r_VehiclesList = new List<VehiclePackage>();
         public VehiclePackage CurrentCustomer { get; private set; }
@@ -69,48 +68,48 @@ namespace Ex03.GarageLogic
 
             return isMatch;
         }
-        public bool FillAirToMax(Vehicle i_Vehicle)
+        public bool FillAirToMax(Vehicle io_Vehicle)
         {
-            i_Vehicle.FillAirToMax();
+            io_Vehicle.FillAirToMax();
             return false;
         }
-        public void ChangeVehicleStatus(VehiclePackage i_VehiclePackage, GarageEnums.eVehicleStatus i_VehicleStatus)
+        public void ChangeVehicleStatus(VehiclePackage io_VehiclePackage, GarageEnums.eVehicleStatus i_VehicleStatus)
         {
-            i_VehiclePackage.SetStatus(i_VehicleStatus);
+            io_VehiclePackage.SetStatus(i_VehicleStatus);
         }
-        public void FillFuelForMotorized(Vehicle i_Vehicle, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
+        public void FillFuelForMotorized(Vehicle io_Vehicle, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
         {
-            if (!(i_Vehicle is IMotorized))
+            if (!(io_Vehicle is IMotorized))
             {
                 throw new ArgumentException("You can not fuel this vehicle!");
             }
-            float currentAmountOfFuel = (i_Vehicle as IMotorized).CurrentAmountOfFuel;
-            float maxAmountToRefuel = (i_Vehicle as IMotorized).MaxAmountOfFuel - currentAmountOfFuel;
+            float currentAmountOfFuel = (io_Vehicle as IMotorized).CurrentAmountOfFuel;
+            float maxAmountToRefuel = (io_Vehicle as IMotorized).MaxAmountOfFuel - currentAmountOfFuel;
             if (!(i_AmountOfFuelToRefuel <= maxAmountToRefuel))
             {
                 throw new GarageExceptions.ValueOutOfRangeException(0, maxAmountToRefuel);
             }
-            if (i_FuelType != (i_Vehicle as IMotorized).FuelType)
+            if (i_FuelType != (io_Vehicle as IMotorized).FuelType)
             {
                 throw new ArgumentException("Wrong fuel type!");
             }
-            (i_Vehicle as IMotorized).FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
+            (io_Vehicle as IMotorized).FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
         }
-        public void ChargeElectricVehicle(Vehicle i_Vehicle, float i_AmountOfTimeToCharge)
+        public void ChargeElectricVehicle(Vehicle io_Vehicle, float i_AmountOfTimeToCharge)
         {
-            if (!(i_Vehicle is IElectrical))
+            if (!(io_Vehicle is IElectrical))
             {
-                if (!(i_Vehicle is IElectrical))
+                if (!(io_Vehicle is IElectrical))
                 {
                     throw new ArgumentException("You can not Charge this vehicle!");
                 }
             }
-            float currentAmountOfTime = (i_Vehicle as IElectrical).BatteryTimeLeft;
-            float maxBatteryTime = (i_Vehicle as IElectrical).MaxBatteryTime - currentAmountOfTime;
+            float currentAmountOfTime = (io_Vehicle as IElectrical).BatteryTimeLeft;
+            float maxBatteryTime = (io_Vehicle as IElectrical).MaxBatteryTime - currentAmountOfTime;
             float minTimeToCharge = 0;
             if (i_AmountOfTimeToCharge <= maxBatteryTime)
             {
-                (i_Vehicle as IElectrical)?.FillBattery(i_AmountOfTimeToCharge);
+                (io_Vehicle as IElectrical)?.FillBattery(i_AmountOfTimeToCharge);
             }
             else
             {

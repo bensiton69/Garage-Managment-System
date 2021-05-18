@@ -7,28 +7,11 @@ namespace Ex03.ConsoleUI
     {
         public static void Main()
         {
-            float? ben = null;
-            DoSomething(ref ben);
-            Console.WriteLine(ben);
             Controller controller = new Controller();
-            //controller.Entry();
-            /*            GarageManagement garageManagement = new GarageManagement();
-                        Vehicle vehicle = new ElectricCar(
-                            "Tesla 2020",
-                            "8932",
-                            90,
-                            "Tesla",
-                            25);
-                        (vehicle as IElectrical).BatteryTimeLeft = 2;
-                        (vehicle as Car).AddCarFields(GarageEnums.eColor.Black, GarageEnums.eNumberOfDoor.Three);
-                        garageManagement.AddNewCar("Elon Mask", "050-333-2127", vehicle);
-                        TypeValiation(vehicle, typeof(IMotorized));*/
+            controller.Entry();
+          
         }
 
-        private static void DoSomething(ref float? i_Ben)
-        {
-            
-        }
 
         /*        private static void TypeValiation<T>(Vehicle i_VehiclePackageVehicle, T i_Param)
         {
@@ -72,5 +55,16 @@ namespace Ex03.ConsoleUI
             (vehicle as Car).AddCarFields(GarageEnums.eColor.White, GarageEnums.eNumberOfDoor.Three);
             i_GarageManagement.AddNewCar("MOTI dhan", "050-111-7777", vehicle);
         }*/
+        /*            GarageManagement garageManagement = new GarageManagement();
+                      Vehicle vehicle = new ElectricCar(
+                          "Tesla 2020",
+                          "8932",
+                          90,
+                          "Tesla",
+                          25);
+                      (vehicle as IElectrical).BatteryTimeLeft = 2;
+                      (vehicle as Car).AddCarFields(GarageEnums.eColor.Black, GarageEnums.eNumberOfDoor.Three);
+                      garageManagement.AddNewCar("Elon Mask", "050-333-2127", vehicle);
+                      TypeValiation(vehicle, typeof(IMotorized));*/
     }
 }

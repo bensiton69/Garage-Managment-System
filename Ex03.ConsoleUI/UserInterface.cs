@@ -41,5 +41,16 @@ namespace Ex03.ConsoleUI
         {
             Console.Clear();
         }
+
+        public void DisplaySuccess()
+        {
+            DisplayMessage("Success!");
+        }
+
+        public void DisplayErrorMessage(string i_ExMessage)
+        {
+            string errorMsg = string.Format("Error: {0}",i_ExMessage);
+            DisplayMessage(errorMsg);
+        }
     }
 }

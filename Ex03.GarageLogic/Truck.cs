@@ -3,7 +3,7 @@
     public class Truck: Vehicle, IMotorized
     {
         private bool m_IsDanger;
-        private float m_MaxWeigth;
+        private float m_MaxWeight;
         public bool IsDanger
         {
             get => m_IsDanger;
@@ -11,8 +11,8 @@
         }
         public float MaxWeight
         {
-            get => m_MaxWeigth;
-            private set => m_MaxWeigth = value;
+            get => m_MaxWeight;
+            private set => m_MaxWeight = value;
         }
         public GarageEnums.eFuelType FuelType { get; set; }
 
