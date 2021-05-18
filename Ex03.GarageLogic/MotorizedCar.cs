@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    public class MotorizedCar: Car,IMotorized
+    public class MotorizedCar : Car, IMotorized
     {
         public GarageEnums.eFuelType FuelType { get; set; }
 
@@ -10,7 +10,6 @@
 
         public bool FillFuel(GarageEnums.eFuelType i_FuelType, float i_AmountOfFuel)
         {
-
             CurrentAmountOfFuel += i_AmountOfFuel;
             return true;
         }

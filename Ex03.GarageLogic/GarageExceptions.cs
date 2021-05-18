@@ -6,23 +6,24 @@ namespace Ex03.GarageLogic
     {
         public class ValueOutOfRangeException : Exception
         {
-            public ValueOutOfRangeException(float i_MinValue, float i_MaxValue)
-                : base($"You only can insert value between {i_MinValue} - {i_MaxValue}.")
-            {
-                maxValue = i_MaxValue;
-                m_MinValue = i_MinValue;
-            }
+            private readonly float r_MinValue;
+            private readonly float r_maxValue;
 
-            private float m_MinValue;
-            private float maxValue;
+            public ValueOutOfRangeException(float i_MinValue, float i_MaxValue)
+                : base(string.Format("You only can insert value between {0} - {1}.", i_MinValue, i_MaxValue))
+            {
+                r_maxValue = i_MaxValue;
+                r_MinValue = i_MinValue;
+            }
         }
 
         public class VehicleDoNotExist : Exception
         {
             public VehicleDoNotExist(string i_LicenseNumber)
-                : base($"The Vehicle with license number: '{i_LicenseNumber}' do not exist!")
+                : base(string.Format("The Vehicle with license number: '{0}' do not exist!", i_LicenseNumber))
             {
             }
+
             public VehicleDoNotExist()
                 : base("The Vehicle with the matching conditions do not exist!")
             {

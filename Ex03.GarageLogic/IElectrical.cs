@@ -13,6 +13,7 @@
             get;
             set;
         }
+
         bool FillBattery(float i_AmountOfTimeToCharge);
 
         void AddElectricalFields(float i_BatteryTimeLeft);

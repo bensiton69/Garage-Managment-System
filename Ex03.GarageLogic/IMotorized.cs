@@ -7,11 +7,13 @@
             get;
             set;
         }
+
         float CurrentAmountOfFuel
         {
             get;
             set;
         }
+
         float MaxAmountOfFuel
         {
             get;

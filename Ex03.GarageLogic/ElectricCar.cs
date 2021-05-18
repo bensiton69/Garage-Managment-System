@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    public class ElectricCar:Car,IElectrical
+    public class ElectricCar : Car, IElectrical
     {
         public float BatteryTimeLeft { get; set; }
 

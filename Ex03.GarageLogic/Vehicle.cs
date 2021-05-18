@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -8,11 +7,16 @@ namespace Ex03.GarageLogic
         private readonly string r_ModelName;
         private readonly string r_LicenseNumber;
         private readonly float r_EnergyLeft;
-        protected readonly List<Wheel> r_Wheels = new List<Wheel>();
+        protected readonly List<Wheel> r_Wheels;
+
         public string ModelName => r_ModelName;
+
         public string LicenseNumber => r_LicenseNumber;
-        public float EnetgyLeft => r_EnergyLeft;
+
+        public float EnergyLeft => r_EnergyLeft;
+
         public List<Wheel> Wheels => r_Wheels;
+
         public bool FillAirToMax()
         {
             foreach(Wheel wheel in Wheels)
@@ -22,6 +26,7 @@ namespace Ex03.GarageLogic
 
             return true;
         }
+
         protected Vehicle(
             string i_ModelName,
             string i_LicenseNumber,
@@ -30,7 +35,9 @@ namespace Ex03.GarageLogic
             int i_NumberOfWheels,
             float i_MaxAirPressure)
         {
-            if (!(0 <= i_EnergyLeft) || !(i_EnergyLeft <= 100))
+            int minVal = 0;
+            int maxnVal = 100;
+            if(!(minVal <= i_EnergyLeft) || !(i_EnergyLeft <= maxnVal))
             {
                 throw new GarageExceptions.ValueOutOfRangeException(0, 100);
             }
@@ -52,8 +59,6 @@ namespace Ex03.GarageLogic
             {
                 wheel.CurrentAirPressure = i_CurrentWheelPressure;
             }
-
         }
     }
-
 }

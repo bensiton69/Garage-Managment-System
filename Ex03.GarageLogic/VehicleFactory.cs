@@ -2,8 +2,17 @@
 {
     public static class VehicleFactory
     {
+        public enum eVehicleType
+        {
+            ElectricalMotorcycle = 1,
+            MotorizedMotorcycle = 2,
+            ElectricalCar = 3,
+            MotorizedCar = 4,
+            Truck = 5
+        }
+
         public static Vehicle CreateVehicle(
-            GarageEnums.eVehicleType i_VehicleType,
+            eVehicleType i_VehicleType,
             string i_LicenseNumber,
             (string modelName, float energyLeft, string) i_GetGeneralInfoForVehicle)
         {
@@ -14,7 +23,7 @@
             (modelName, energyLeft, wheelManufacturerName) = i_GetGeneralInfoForVehicle;
             switch (i_VehicleType)
             {
-                case GarageEnums.eVehicleType.ElectricalMotorcycle:
+                case eVehicleType.ElectricalMotorcycle:
                     {
                         vehicle = new ElectricalMotorcycle(
                             modelName,
@@ -23,7 +32,8 @@
                             wheelManufacturerName);
                         break;
                     }
-                case GarageEnums.eVehicleType.MotorizedMotorcycle:
+
+                case eVehicleType.MotorizedMotorcycle:
                     {
                         vehicle = new MotorizedMotorcycle(
                             modelName,
@@ -32,7 +42,8 @@
                             wheelManufacturerName);
                         break;
                     }
-                case GarageEnums.eVehicleType.ElectricalCar:
+                
+                case eVehicleType.ElectricalCar:
                     {
                         vehicle = new ElectricCar(
                             modelName,
@@ -41,7 +52,8 @@
                             wheelManufacturerName);
                         break;
                     }
-                case GarageEnums.eVehicleType.MotorizedCar:
+
+                case eVehicleType.MotorizedCar:
                     {
                         vehicle = new MotorizedCar(
                             modelName,
@@ -50,7 +62,8 @@
                             wheelManufacturerName);
                         break;
                     }
-                case GarageEnums.eVehicleType.Truck:
+
+                case eVehicleType.Truck:
                     {
                         vehicle = new Truck(
                             modelName,

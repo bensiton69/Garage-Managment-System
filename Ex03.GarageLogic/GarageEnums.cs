@@ -7,6 +7,7 @@
             No = 0,
             Yes = 1
         }
+
         public enum eFuelType
         {
             Soler = 1,
@@ -14,6 +15,7 @@
             Octan96 = 3,
             Octan98 = 4
         }
+
         public enum eColor
         {
             Red = 1,
@@ -21,6 +23,7 @@
             White = 3,
             Black = 4
         }
+
         public enum eUserAction
         {
             Exit = 0,
@@ -31,21 +34,13 @@
             RefuelingMotorized = 5,
             ChargeElectrical = 6,
             DisplayFullInfo = 7
-
         }
+
         public enum eVehicleStatus
         {
             InProgress = 1,
             Repaired = 2,
             Paid = 3
-        }
-        public enum eVehicleType
-        {
-            ElectricalMotorcycle = 1,
-            MotorizedMotorcycle = 2,
-            ElectricalCar = 3,
-            MotorizedCar = 4,
-            Truck = 5
         }
 
         public enum eLicenseType
@@ -64,7 +59,4 @@
             Five = 5
         }
     }
-
-
-
 }

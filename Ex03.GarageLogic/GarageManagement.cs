@@ -1,36 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
     public class GarageManagement
     {
-        //// TODO:
-        //// 1. 
-        //// 2. 
-        //// 3. dont use direct cast
-        //// 4. 
-        //// 5. move eVehicleType to Factory?
-        //// 6.
-        //// 7. from int to byte?
-        //// 8. user name only contain letters
-        //// 9. phone numbers to only numbers
-        //// 10. 
-
         private readonly List<VehiclePackage> r_VehiclesList = new List<VehiclePackage>();
-        private List<VehiclePackage> Vehicles
-        {
-            get
-            {
-                return r_VehiclesList;
-            }
-        }
-        
-        
-        
+
+        private List<VehiclePackage> Vehicles => r_VehiclesList;
+
         public string GetLicenseNumbersByStatus(GarageEnums.eVehicleStatus i_VehicleStatus)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -39,7 +18,10 @@ namespace Ex03.GarageLogic
                 if(vehiclePackage.Status == i_VehicleStatus)
                 {
                     stringBuilder.Append(
-                        ($"Status: {vehiclePackage.Status}, License number: {vehiclePackage.Vehicle.LicenseNumber}"));
+                        string.Format(
+                            "Status: {0}, License number: {1}",
+                            vehiclePackage.Status,
+                            vehiclePackage.Vehicle.LicenseNumber));
                     stringBuilder.AppendLine();
                 }
             }
@@ -48,20 +30,24 @@ namespace Ex03.GarageLogic
             {
                 throw new GarageExceptions.VehicleDoNotExist();
             }
+
             return stringBuilder.ToString();
         }
+
         public string GetLicenseNumbers()
         {
             StringBuilder stringBuilder = new StringBuilder();
             foreach (VehiclePackage vehiclePackage in r_VehiclesList)
             {
-                stringBuilder.Append(($"Status: {vehiclePackage.Status}, License number: {vehiclePackage.Vehicle.LicenseNumber}"));
+                stringBuilder.Append(string.Format(
+                    "Status: {0}, License number: {1}",
+                    vehiclePackage.Status,
+                    vehiclePackage.Vehicle.LicenseNumber));
                 stringBuilder.AppendLine();
             }
+
             return stringBuilder.ToString();
         }
-
-
 
         public bool IsEmpty()
         {
@@ -73,7 +59,8 @@ namespace Ex03.GarageLogic
 
             return isEmpty;
         }
-        public bool AddNewCar(string i_OwnerFullName, string i_OwnerPhoneNumber, Vehicle i_Vehicle)
+
+        public bool AddNewVehicle(string i_OwnerFullName, string i_OwnerPhoneNumber, Vehicle i_Vehicle)
         {
             VehiclePackage vehiclePackageToAdd = new VehiclePackage(
                 i_OwnerFullName,
@@ -82,6 +69,7 @@ namespace Ex03.GarageLogic
             r_VehiclesList.Add(vehiclePackageToAdd);
             return true;
         }
+
         public bool IsLicenseNumberMatch(string i_LicenseNumberToCheck, ref VehiclePackage io_VehiclePackage)
         {
             bool isMatch = false;
@@ -97,33 +85,40 @@ namespace Ex03.GarageLogic
 
             return isMatch;
         }
+
         public bool FillAirToMax(Vehicle i_Vehicle)
         {
             i_Vehicle.FillAirToMax();
             return false;
         }
+
         public void ChangeVehicleStatus(VehiclePackage io_VehiclePackage, GarageEnums.eVehicleStatus i_VehicleStatus)
         {
             io_VehiclePackage.Status = i_VehicleStatus;
         }
+
         public void FillFuelForMotorized(Vehicle i_Vehicle, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
         {
             if (!(i_Vehicle is IMotorized))
             {
                 throw new ArgumentException("You can not fuel this vehicle!");
             }
+
             float currentAmountOfFuel = (i_Vehicle as IMotorized).CurrentAmountOfFuel;
             float maxAmountToRefuel = (i_Vehicle as IMotorized).MaxAmountOfFuel - currentAmountOfFuel;
             if (!(i_AmountOfFuelToRefuel <= maxAmountToRefuel))
             {
                 throw new GarageExceptions.ValueOutOfRangeException(0, maxAmountToRefuel);
             }
+
             if (i_FuelType != (i_Vehicle as IMotorized).FuelType)
             {
                 throw new ArgumentException("Wrong fuel type!");
             }
+
             (i_Vehicle as IMotorized).FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
         }
+
         public void ChargeElectricVehicle(Vehicle i_Vehicle, float i_AmountOfTimeToCharge)
         {
             if (!(i_Vehicle is IElectrical))
@@ -133,18 +128,20 @@ namespace Ex03.GarageLogic
                     throw new ArgumentException("You can not Charge this vehicle!");
                 }
             }
+
             float currentAmountOfTime = (i_Vehicle as IElectrical).BatteryTimeLeft;
             float maxBatteryTime = (i_Vehicle as IElectrical).MaxBatteryTime - currentAmountOfTime;
             float minTimeToCharge = 0;
             if (i_AmountOfTimeToCharge <= maxBatteryTime)
             {
-                (i_Vehicle as IElectrical)?.FillBattery(i_AmountOfTimeToCharge);
+                (i_Vehicle as IElectrical).FillBattery(i_AmountOfTimeToCharge);
             }
             else
             {
                 throw new GarageExceptions.ValueOutOfRangeException(minTimeToCharge, maxBatteryTime);
             }
         }
+
         public string VehiclePackageToDisplay(VehiclePackage i_VehiclePackage)
         {
             string ownerName;
@@ -163,61 +160,67 @@ status: {2}",
                 vehicleStatus));
             Vehicle vehicle = i_VehiclePackage.Vehicle;
             stringBuilder.Append(
-                $@"
+                string.Format(
+                    @"
 Vehicle Info:
-Model name: {vehicle.ModelName}.
-License number: {vehicle.LicenseNumber}.
-Energy left: {vehicle.EnetgyLeft}.");
+Model name: {0}.
+License number: {1}.
+Energy left: {2}.",
+                    vehicle.ModelName,
+                    vehicle.LicenseNumber,
+                    vehicle.EnergyLeft));
             stringBuilder.AppendLine();
             foreach (Wheel wheel in vehicle.Wheels)
             {
-                stringBuilder.Append($"wheel info: {wheel.GetInfo()}");
+                stringBuilder.Append(string.Format("wheel info: {0}", wheel.GetInfo()));
                 stringBuilder.AppendLine();
             }
 
             if (vehicle is IMotorized)
             {
-                stringBuilder.Append($"Fuel Type: {(vehicle as IMotorized).FuelType}");
+                stringBuilder.Append(string.Format("Fuel Type: {0}", (vehicle as IMotorized).FuelType));
                 stringBuilder.AppendLine();
-                stringBuilder.Append($"Fuel current amount: {(vehicle as IMotorized).CurrentAmountOfFuel}");
+                stringBuilder.Append(
+                    string.Format("Fuel current amount: {0}", (vehicle as IMotorized).CurrentAmountOfFuel));
                 stringBuilder.AppendLine();
-                stringBuilder.Append($"Fuel Max amount of fuel: {(vehicle as IMotorized).MaxAmountOfFuel}");
+                stringBuilder.Append(
+                    string.Format("Fuel Max amount of fuel: {0}", (vehicle as IMotorized).MaxAmountOfFuel));
                 stringBuilder.AppendLine();
             }
 
             if (vehicle is IElectrical)
             {
-                stringBuilder.Append($"battery time left: {(vehicle as IElectrical).BatteryTimeLeft}");
+                stringBuilder.Append(string.Format("battery time left: {0}", (vehicle as IElectrical).BatteryTimeLeft));
                 stringBuilder.AppendLine();
-                stringBuilder.Append($"battery max time: {(vehicle as IElectrical).MaxBatteryTime}");
+                stringBuilder.Append(string.Format("battery max time: {0}", (vehicle as IElectrical).MaxBatteryTime));
                 stringBuilder.AppendLine();
             }
 
             if (vehicle is Car)
             {
-                stringBuilder.Append($"Number of doors: {(vehicle as Car).NumberOfDoors}");
+                stringBuilder.Append(string.Format("Number of doors: {0}", (vehicle as Car).NumberOfDoors));
                 stringBuilder.AppendLine();
-                stringBuilder.Append($"Color: {(vehicle as Car).Color}");
+                stringBuilder.Append(string.Format("Color: {0}", (vehicle as Car).Color));
                 stringBuilder.AppendLine();
             }
 
             if (vehicle is Motorcycle)
             {
-                stringBuilder.Append($"License Type: {(vehicle as Motorcycle).LicenseType}");
+                stringBuilder.Append(string.Format("License Type: {0}", (vehicle as Motorcycle).LicenseType));
                 stringBuilder.AppendLine();
-                stringBuilder.Append($"Motor volume in cc: {(vehicle as Motorcycle).EngineVolumeCC}");
+                stringBuilder.Append(string.Format("Motor volume in cc: {0}", (vehicle as Motorcycle).EngineVolumeCC));
                 stringBuilder.AppendLine();
             }
 
             if (vehicle is Truck)
             {
-                stringBuilder.Append($"Is danger: {(vehicle as Truck).IsDanger}");
+                stringBuilder.Append(string.Format("Is danger: {0}", (vehicle as Truck).IsDanger));
                 stringBuilder.AppendLine();
-                stringBuilder.Append($"Max weight to carry: {(vehicle as Truck).MaxWeight}");
+                stringBuilder.Append(string.Format("Max weight to carry: {0}", (vehicle as Truck).MaxWeight));
                 stringBuilder.AppendLine();
             }
 
-            stringBuilder.Append($"Vehicle Type: { vehicle.GetType()}");
+            stringBuilder.Append(string.Format("Vehicle Type: {0}", vehicle.GetType()));
             stringBuilder.AppendLine();
             return stringBuilder.ToString();
         }

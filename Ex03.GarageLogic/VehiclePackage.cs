@@ -9,22 +9,11 @@
 
         public GarageEnums.eVehicleStatus Status
         {
-            get
-            {
-                return m_Status;
-            }
-            set
-            {
-                m_Status = value;
-            }
+            get => m_Status;
+            set => m_Status = value;
         }
-        public Vehicle Vehicle
-        {
-            get
-            {
-                return r_Vehicle;
-            }
-        }
+        public Vehicle Vehicle => r_Vehicle;
+
         public string OwnerFullName => r_OwnerFullName;
         public string OwnerPhoneNumber => r_OwnerPhoneNumber;
         public VehiclePackage(string i_OwnerFullName, string i_OwnerPhoneNumber, Vehicle i_Vehicle)

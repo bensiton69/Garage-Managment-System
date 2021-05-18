@@ -1,19 +1,22 @@
 ﻿namespace Ex03.GarageLogic
 {
-    public class Truck: Vehicle, IMotorized
+    public class Truck : Vehicle, IMotorized
     {
         private bool m_IsDanger;
         private float m_MaxWeight;
+
         public bool IsDanger
         {
             get => m_IsDanger;
             private set => m_IsDanger = value;
         }
+
         public float MaxWeight
         {
             get => m_MaxWeight;
             private set => m_MaxWeight = value;
         }
+
         public GarageEnums.eFuelType FuelType { get; set; }
 
         public float CurrentAmountOfFuel { get; set; }
@@ -47,6 +50,5 @@
             FuelType = GarageEnums.eFuelType.Soler;
             MaxAmountOfFuel = 120;
         }
-
     }
 }

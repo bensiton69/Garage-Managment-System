@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    public class MotorizedMotorcycle: Motorcycle, IMotorized
+    public class MotorizedMotorcycle : Motorcycle, IMotorized
     {
         public GarageEnums.eFuelType FuelType { get; set; }
 
