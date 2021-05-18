@@ -19,12 +19,13 @@ namespace Ex03.GarageLogic
 
         public class VehicleDoNotExist : Exception
         {
-            private readonly string r_LicenseNumber;
-
             public VehicleDoNotExist(string i_LicenseNumber)
                 : base($"The Vehicle with license number: '{i_LicenseNumber}' do not exist!")
             {
-                r_LicenseNumber = i_LicenseNumber;
+            }
+            public VehicleDoNotExist()
+                : base("The Vehicle with the matching conditions do not exist!")
+            {
             }
         }
 

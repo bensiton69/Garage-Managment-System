@@ -9,30 +9,60 @@ namespace Ex03.GarageLogic
     public class GarageManagement
     {
         //// TODO:
-        //// 1. make lists as delegates
-        //// 2. nullable
+        //// 1. 
+        //// 2. 
         //// 3. dont use direct cast
-        //// 4. io_ instead of i_ where ref
+        //// 4. 
         //// 5. move eVehicleType to Factory?
-        //// 6. struct or class?
+        //// 6.
         //// 7. from int to byte?
         //// 8. user name only contain letters
-        //// 9. add success msg
+        //// 9. phone numbers to only numbers
         //// 10. 
 
         private readonly List<VehiclePackage> r_VehiclesList = new List<VehiclePackage>();
-        public VehiclePackage CurrentCustomer { get; private set; }
-        public List<VehiclePackage> Vehicles
+        private List<VehiclePackage> Vehicles
         {
             get
             {
                 return r_VehiclesList;
             }
         }
-        public List<VehiclePackage> GetVehicleByStatus()
+        
+        
+        
+        public string GetLicenseNumbersByStatus(GarageEnums.eVehicleStatus i_VehicleStatus)
         {
-            return r_VehiclesList.OrderBy(vehiclePackage => vehiclePackage.Status).ToList();
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (VehiclePackage vehiclePackage in r_VehiclesList)
+            {
+                if(vehiclePackage.Status == i_VehicleStatus)
+                {
+                    stringBuilder.Append(
+                        ($"Status: {vehiclePackage.Status}, License number: {vehiclePackage.Vehicle.LicenseNumber}"));
+                    stringBuilder.AppendLine();
+                }
+            }
+
+            if(stringBuilder.Length == 0)
+            {
+                throw new GarageExceptions.VehicleDoNotExist();
+            }
+            return stringBuilder.ToString();
         }
+        public string GetLicenseNumbers()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (VehiclePackage vehiclePackage in r_VehiclesList)
+            {
+                stringBuilder.Append(($"Status: {vehiclePackage.Status}, License number: {vehiclePackage.Vehicle.LicenseNumber}"));
+                stringBuilder.AppendLine();
+            }
+            return stringBuilder.ToString();
+        }
+
+
+
         public bool IsEmpty()
         {
             bool isEmpty = true;
@@ -52,7 +82,7 @@ namespace Ex03.GarageLogic
             r_VehiclesList.Add(vehiclePackageToAdd);
             return true;
         }
-        public bool IsLicenseNumberMatch(string i_LicenseNumberToCheck, ref VehiclePackage i_VehiclePackage)
+        public bool IsLicenseNumberMatch(string i_LicenseNumberToCheck, ref VehiclePackage io_VehiclePackage)
         {
             bool isMatch = false;
             foreach (VehiclePackage vehiclePackage in Vehicles)
@@ -60,63 +90,61 @@ namespace Ex03.GarageLogic
                 if (i_LicenseNumberToCheck == vehiclePackage.Vehicle.LicenseNumber)
                 {
                     isMatch = true;
-                    CurrentCustomer = vehiclePackage;
-                    i_VehiclePackage = vehiclePackage;
+                    io_VehiclePackage = vehiclePackage;
                     break;
                 }
             }
 
             return isMatch;
         }
-        public bool FillAirToMax(Vehicle io_Vehicle)
+        public bool FillAirToMax(Vehicle i_Vehicle)
         {
-            io_Vehicle.FillAirToMax();
+            i_Vehicle.FillAirToMax();
             return false;
         }
         public void ChangeVehicleStatus(VehiclePackage io_VehiclePackage, GarageEnums.eVehicleStatus i_VehicleStatus)
         {
-            io_VehiclePackage.SetStatus(i_VehicleStatus);
+            io_VehiclePackage.Status = i_VehicleStatus;
         }
-        public void FillFuelForMotorized(Vehicle io_Vehicle, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
+        public void FillFuelForMotorized(Vehicle i_Vehicle, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
         {
-            if (!(io_Vehicle is IMotorized))
+            if (!(i_Vehicle is IMotorized))
             {
                 throw new ArgumentException("You can not fuel this vehicle!");
             }
-            float currentAmountOfFuel = (io_Vehicle as IMotorized).CurrentAmountOfFuel;
-            float maxAmountToRefuel = (io_Vehicle as IMotorized).MaxAmountOfFuel - currentAmountOfFuel;
+            float currentAmountOfFuel = (i_Vehicle as IMotorized).CurrentAmountOfFuel;
+            float maxAmountToRefuel = (i_Vehicle as IMotorized).MaxAmountOfFuel - currentAmountOfFuel;
             if (!(i_AmountOfFuelToRefuel <= maxAmountToRefuel))
             {
                 throw new GarageExceptions.ValueOutOfRangeException(0, maxAmountToRefuel);
             }
-            if (i_FuelType != (io_Vehicle as IMotorized).FuelType)
+            if (i_FuelType != (i_Vehicle as IMotorized).FuelType)
             {
                 throw new ArgumentException("Wrong fuel type!");
             }
-            (io_Vehicle as IMotorized).FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
+            (i_Vehicle as IMotorized).FillFuel(i_FuelType, i_AmountOfFuelToRefuel);
         }
-        public void ChargeElectricVehicle(Vehicle io_Vehicle, float i_AmountOfTimeToCharge)
+        public void ChargeElectricVehicle(Vehicle i_Vehicle, float i_AmountOfTimeToCharge)
         {
-            if (!(io_Vehicle is IElectrical))
+            if (!(i_Vehicle is IElectrical))
             {
-                if (!(io_Vehicle is IElectrical))
+                if (!(i_Vehicle is IElectrical))
                 {
                     throw new ArgumentException("You can not Charge this vehicle!");
                 }
             }
-            float currentAmountOfTime = (io_Vehicle as IElectrical).BatteryTimeLeft;
-            float maxBatteryTime = (io_Vehicle as IElectrical).MaxBatteryTime - currentAmountOfTime;
+            float currentAmountOfTime = (i_Vehicle as IElectrical).BatteryTimeLeft;
+            float maxBatteryTime = (i_Vehicle as IElectrical).MaxBatteryTime - currentAmountOfTime;
             float minTimeToCharge = 0;
             if (i_AmountOfTimeToCharge <= maxBatteryTime)
             {
-                (io_Vehicle as IElectrical)?.FillBattery(i_AmountOfTimeToCharge);
+                (i_Vehicle as IElectrical)?.FillBattery(i_AmountOfTimeToCharge);
             }
             else
             {
                 throw new GarageExceptions.ValueOutOfRangeException(minTimeToCharge, maxBatteryTime);
             }
         }
-
         public string VehiclePackageToDisplay(VehiclePackage i_VehiclePackage)
         {
             string ownerName;
@@ -192,6 +220,17 @@ Energy left: {vehicle.EnetgyLeft}.");
             stringBuilder.Append($"Vehicle Type: { vehicle.GetType()}");
             stringBuilder.AppendLine();
             return stringBuilder.ToString();
+        }
+
+        public void LettersValidation(string i_FullName)
+        {
+            foreach(char charToCheck in i_FullName)
+            {
+                if(!char.IsLetter(charToCheck) && !charToCheck.Equals(' '))
+                {
+                    throw new ArgumentException("You cannot use anything but letters here.");
+                }
+            }
         }
     }
 }

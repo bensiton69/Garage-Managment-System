@@ -2,45 +2,40 @@
 {
     public class VehiclePackage
     {
-        private string m_OwnerFullName;
-        private string m_OwnerPhoneNumber;
-        private Vehicle m_Vehicle;
+        private readonly string r_OwnerFullName;
+        private readonly string r_OwnerPhoneNumber;
+        private readonly Vehicle r_Vehicle;
         private GarageEnums.eVehicleStatus m_Status = GarageEnums.eVehicleStatus.InProgress;
-        public GarageEnums.eVehicleStatus Status => m_Status;
-        public void SetStatus(GarageEnums.eVehicleStatus i_VehicleStatus)
+
+        public GarageEnums.eVehicleStatus Status
         {
-            m_Status = i_VehicleStatus;
+            get
+            {
+                return m_Status;
+            }
+            set
+            {
+                m_Status = value;
+            }
         }
         public Vehicle Vehicle
         {
             get
             {
-                return m_Vehicle;
+                return r_Vehicle;
             }
         }
-        public string OwnerFullName
-        {
-            get
-            {
-                return m_OwnerFullName;
-            }
-        }
-        public string OwnerPhoneNumber
-        {
-            get
-            {
-                return m_OwnerPhoneNumber;
-            }
-        }
+        public string OwnerFullName => r_OwnerFullName;
+        public string OwnerPhoneNumber => r_OwnerPhoneNumber;
         public VehiclePackage(string i_OwnerFullName, string i_OwnerPhoneNumber, Vehicle i_Vehicle)
         {
-            m_OwnerFullName = i_OwnerFullName;
-            m_OwnerPhoneNumber = i_OwnerPhoneNumber;
-            m_Vehicle = i_Vehicle;
+            r_OwnerFullName = i_OwnerFullName;
+            r_OwnerPhoneNumber = i_OwnerPhoneNumber;
+            r_Vehicle = i_Vehicle;
         }
         public (string, string, GarageEnums.eVehicleStatus) GetOwnerInfo()
         {
-            return (m_OwnerFullName, m_OwnerPhoneNumber, m_Status);
+            return (OwnerFullName, OwnerPhoneNumber, Status);
         }
     }
 }

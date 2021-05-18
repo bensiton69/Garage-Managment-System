@@ -27,14 +27,12 @@ namespace Ex03.ConsoleUI
         }
         public void Entry()
         {
-            r_GarageModel.Vehicles.Clear();
-
             while(true)
             {
                 try
                 {
                     GarageEnums.eUserAction userInput = 0;
-                    userInput = (GarageEnums.eUserAction)buildChoiceMenu(userInput);
+                    userInput = buildChoiceMenu(userInput);
                     r_UserInterfaceView.ClearScreen();
                     startChoiceMenu(userInput);
                     r_UserInterfaceView.DisplaySuccess();
@@ -107,25 +105,19 @@ namespace Ex03.ConsoleUI
         {
             GarageEnums.eChoice sortChoice = 0;
             r_UserInterfaceView.DisplayMessage("Would you Display by status?");
-            int userChoice = buildChoiceMenu(sortChoice);
-            sortChoice = (GarageEnums.eChoice)userChoice;
-            List<VehiclePackage> vehiclePackageToPrint;
-            StringBuilder stringBuilder = new StringBuilder();
+            sortChoice = buildChoiceMenu(sortChoice);
+            string allLicenseToPrint;
+
             if (sortChoice == GarageEnums.eChoice.Yes)
             {
-                vehiclePackageToPrint = r_GarageModel.GetVehicleByStatus();
+                GarageEnums.eVehicleStatus sortStatus = 0;
+                allLicenseToPrint = r_GarageModel.GetLicenseNumbersByStatus(buildChoiceMenu(sortStatus));
             }
             else
             {
-                vehiclePackageToPrint = r_GarageModel.Vehicles;
+                allLicenseToPrint = r_GarageModel.GetLicenseNumbers();
             }
-            foreach (VehiclePackage vehiclePackage in vehiclePackageToPrint)
-            {
-                stringBuilder.Append(($"Status: {vehiclePackage.Status}, License number: {vehiclePackage.Vehicle.LicenseNumber}"));
-                stringBuilder.AppendLine();
-            }
-            r_UserInterfaceView.DisplayMessage(stringBuilder.ToString());
-
+            r_UserInterfaceView.DisplayMessage(allLicenseToPrint);
         }
         private void changeVehicleState()
         {
@@ -134,9 +126,7 @@ namespace Ex03.ConsoleUI
             VehiclePackage vehiclePackage = null;
             vehicleValidation(licenseNumber, ref vehiclePackage);
             GarageEnums.eVehicleStatus vehicleStatus = 0;
-            int userChoice = buildChoiceMenu(vehicleStatus);
-            vehicleStatus = (GarageEnums.eVehicleStatus)userChoice;
-            r_UserInterfaceView.DisplayMessage(($"{vehicleStatus}"));
+            vehicleStatus = buildChoiceMenu(vehicleStatus);
             r_GarageModel.ChangeVehicleStatus(vehiclePackage, vehicleStatus);
         }
         private void fillAirToMax()
@@ -241,9 +231,8 @@ namespace Ex03.ConsoleUI
             float maxWeight = 0;
             bool isDanger = false;
             r_UserInterfaceView.DisplayMessage("Does your truck carry any dangerous materials?");
-            int userChoice = buildChoiceMenu(isDangerChoice);
-            isDangerChoice = (GarageEnums.eChoice)userChoice;
-            if(isDangerChoice == GarageEnums.eChoice.Yes)
+            isDangerChoice = buildChoiceMenu(isDangerChoice);
+            if (isDangerChoice == GarageEnums.eChoice.Yes)
             {
                 isDanger = true;
             }
@@ -379,6 +368,7 @@ namespace Ex03.ConsoleUI
             string phoneNumber = null;
             r_UserInterfaceView.DisplayMessage("Please insert Your full name: ");
             getVariable(ref fullName, k_MinLengthForNames, k_MaxLengthForNames);
+            r_GarageModel.LettersValidation(fullName);
             r_UserInterfaceView.DisplayMessage("Please insert Your phone number: ");
             getVariable(ref phoneNumber, k_MinLengthForPhoneNumber, k_MaxLengthForPhoneNumber);
             return (fullName, phoneNumber);
@@ -399,7 +389,7 @@ namespace Ex03.ConsoleUI
 
 
 
-        private int buildChoiceMenu<T>(T i_Param)
+        private T buildChoiceMenu<T>(T i_Param)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append("Choose the option number from choice menu: ");
@@ -414,7 +404,7 @@ namespace Ex03.ConsoleUI
             int maxVal = Enum.GetValues(typeof(T)).Cast<int>().Max();
             int minVal = Enum.GetValues(typeof(T)).Cast<int>().Min();
             getVariable(ref userInput,minVal,maxVal);
-            return userInput;
+            return (T)Enum.ToObject(typeof(T), userInput);
         }
         private void garageValidation()
         {
