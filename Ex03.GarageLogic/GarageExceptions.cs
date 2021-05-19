@@ -7,12 +7,19 @@ namespace Ex03.GarageLogic
         public class ValueOutOfRangeException : Exception
         {
             private readonly float r_MinValue;
-            private readonly float r_maxValue;
+            private readonly float r_MaxValue;
 
             public ValueOutOfRangeException(float i_MinValue, float i_MaxValue)
                 : base(string.Format("You only can insert value between {0} - {1}.", i_MinValue, i_MaxValue))
             {
-                r_maxValue = i_MaxValue;
+                r_MaxValue = i_MaxValue;
+                r_MinValue = i_MinValue;
+            }
+
+            public ValueOutOfRangeException(string i_Message, float i_MinValue, float i_MaxValue)
+                : base(string.Format(i_Message + "{0} - {1}.", i_MinValue, i_MaxValue))
+            {
+                r_MaxValue = i_MaxValue;
                 r_MinValue = i_MinValue;
             }
         }
@@ -34,6 +41,14 @@ namespace Ex03.GarageLogic
         {
             public GarageIsEmpty()
                 : base("The garage is empty!")
+            {
+            }
+        }
+
+        public class VehicleIsMax : Exception
+        {
+            public VehicleIsMax()
+                : base("This action is not available, Its already on Max!")
             {
             }
         }

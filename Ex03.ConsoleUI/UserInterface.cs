@@ -82,7 +82,7 @@ namespace Ex03.ConsoleUI
                 {
                     //// input is not valid
                     GarageExceptions.ValueOutOfRangeException voore =
-                        new GarageExceptions.ValueOutOfRangeException(i_MinLength, i_MaxLength);
+                        new GarageExceptions.ValueOutOfRangeException("The length of input should be between ", i_MinLength, i_MaxLength);
                     DisplayMessage(voore.Message);
                 }
             }

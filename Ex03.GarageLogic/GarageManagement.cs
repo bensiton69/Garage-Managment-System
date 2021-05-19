@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Ex03.GarageLogic
@@ -88,6 +89,8 @@ namespace Ex03.GarageLogic
 
         public bool FillAirToMax(Vehicle i_Vehicle)
         {
+            Wheel wheel = i_Vehicle.Wheels.FirstOrDefault();
+            IsEqualsToMax(wheel.CurrentAirPressure, wheel.MaxAirPressure);
             i_Vehicle.FillAirToMax();
             return false;
         }
@@ -99,13 +102,8 @@ namespace Ex03.GarageLogic
 
         public void FillFuelForMotorized(Vehicle i_Vehicle, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
         {
-            if (!(i_Vehicle is IMotorized))
-            {
-                throw new ArgumentException("You can not fuel this vehicle!");
-            }
-
             float currentAmountOfFuel = (i_Vehicle as IMotorized).CurrentAmountOfFuel;
-            float maxAmountToRefuel = (i_Vehicle as IMotorized).MaxAmountOfFuel - currentAmountOfFuel;
+            float maxAmountToRefuel = SubTwoFloats((i_Vehicle as IMotorized).MaxAmountOfFuel, currentAmountOfFuel);
             if (!(i_AmountOfFuelToRefuel <= maxAmountToRefuel))
             {
                 throw new GarageExceptions.ValueOutOfRangeException(0, maxAmountToRefuel);
@@ -121,16 +119,8 @@ namespace Ex03.GarageLogic
 
         public void ChargeElectricVehicle(Vehicle i_Vehicle, float i_AmountOfTimeToCharge)
         {
-            if (!(i_Vehicle is IElectrical))
-            {
-                if (!(i_Vehicle is IElectrical))
-                {
-                    throw new ArgumentException("You can not Charge this vehicle!");
-                }
-            }
-
             float currentAmountOfTime = (i_Vehicle as IElectrical).BatteryTimeLeft;
-            float maxBatteryTime = (i_Vehicle as IElectrical).MaxBatteryTime - currentAmountOfTime;
+            float maxBatteryTime = SubTwoFloats((i_Vehicle as IElectrical).MaxBatteryTime, currentAmountOfTime);
             float minTimeToCharge = 0;
             if (i_AmountOfTimeToCharge <= maxBatteryTime)
             {
@@ -225,14 +215,48 @@ Energy left: {2}.",
             return stringBuilder.ToString();
         }
 
-        public void LettersValidation(string i_FullName)
+        public void GarageValidation()
         {
-            foreach(char charToCheck in i_FullName)
+            if (IsEmpty())
             {
-                if(!char.IsLetter(charToCheck) && !charToCheck.Equals(' '))
-                {
-                    throw new ArgumentException("You cannot use anything but letters here.");
-                }
+                throw new GarageExceptions.GarageIsEmpty();
+            }
+        }
+
+        public void VehicleValidation(string i_LicenseNumber, ref VehiclePackage i_VehiclePackage)
+        {
+            if (IsLicenseNumberMatch(i_LicenseNumber, ref i_VehiclePackage) == false)
+            {
+                throw new GarageExceptions.VehicleDoNotExist(i_LicenseNumber);
+            }
+        }
+
+        public void ElectricalValidation(Vehicle i_VehicleToCheck)
+        {
+            if(!(i_VehicleToCheck is IElectrical))
+            {
+                throw new ArgumentException("This vehicle is not Electrical!");
+            }
+        }
+
+        public void MotorizedValidation(Vehicle i_VehicleToCheck)
+        {
+            if (!(i_VehicleToCheck is IMotorized))
+            {
+                throw new ArgumentException("This vehicle is not Motorized!");
+            }
+        }
+
+        public float SubTwoFloats(float i_FirstFloat, float i_SecondFloat)
+        {
+            return (float)Math.Round(i_FirstFloat - i_SecondFloat, 1);
+        }
+
+        public void IsEqualsToMax(float i_CurrentFloat, float i_MaxFloat)
+        {
+            if(SubTwoFloats(i_CurrentFloat, i_MaxFloat) == 0)
+            {
+                throw new GarageExceptions.VehicleIsMax();
             }
         }
     }

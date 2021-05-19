@@ -13,6 +13,8 @@ namespace Ex03.ConsoleUI
         private const int k_MaxLengthForLicenseNumber = 12;
         private const int k_MinLengthForPhoneNumber = 6;
         private const int k_MaxLengthForPhoneNumber = 10;
+        private const int k_MinMotorcycleVolume = 50;
+        private const int k_MaxnMotorcycleVolume = 1890;
         private const float k_MinIsFloatZero = 0;
         private const float k_MaxValForTruckCarry = 99999;
         private readonly GarageManagement r_GarageModel;
@@ -60,27 +62,27 @@ namespace Ex03.ConsoleUI
                     addNewVehicleToGarage();
                     break;
                 case GarageEnums.eUserAction.DisplayAllLicenseNumbersInGarage:
-                    garageValidation();
+                    r_GarageModel.GarageValidation();
                     displayLicenseNumberByStatus();
                     break;
                 case GarageEnums.eUserAction.ChangeVehicleState:
-                    garageValidation();
+                    r_GarageModel.GarageValidation();
                     changeVehicleState();
                     break;
                 case GarageEnums.eUserAction.FillAirToMax:
-                    garageValidation();
+                    r_GarageModel.GarageValidation();
                     fillAirToMax();
                     break;
                 case GarageEnums.eUserAction.RefuelingMotorized:
-                    garageValidation();
+                    r_GarageModel.GarageValidation();
                     refuelingMotorized();
                     break;
                 case GarageEnums.eUserAction.ChargeElectrical:
-                    garageValidation(); 
+                    r_GarageModel.GarageValidation(); 
                     chargeElectrical();
                     break;
                 case GarageEnums.eUserAction.DisplayFullInfo:
-                    garageValidation();
+                    r_GarageModel.GarageValidation();
                     displayFullInfo();
                     break;
             }
@@ -126,7 +128,7 @@ namespace Ex03.ConsoleUI
             r_UserInterfaceView.DisplayMessage("ChangeVehicleState");
             string licenseNumber = getLicenseNumber();
             VehiclePackage vehiclePackage = null;
-            vehicleValidation(licenseNumber, ref vehiclePackage);
+            r_GarageModel.VehicleValidation(licenseNumber, ref vehiclePackage);
             GarageEnums.eVehicleStatus vehicleStatus = 0;
             vehicleStatus = buildChoiceMenu(vehicleStatus);
             r_GarageModel.ChangeVehicleStatus(vehiclePackage, vehicleStatus);
@@ -137,7 +139,7 @@ namespace Ex03.ConsoleUI
             r_UserInterfaceView.DisplayMessage("FillAirToMax");
             string licenseNumber = getLicenseNumber();
             VehiclePackage vehiclePackage = null;
-            vehicleValidation(licenseNumber, ref vehiclePackage);
+            r_GarageModel.VehicleValidation(licenseNumber, ref vehiclePackage);
             r_GarageModel.FillAirToMax(vehiclePackage.Vehicle);
         }
 
@@ -147,12 +149,17 @@ namespace Ex03.ConsoleUI
             string licenseNumber = getLicenseNumber();
             float amountOfFuelToRefuel = 0;
             VehiclePackage vehiclePackage = null;
-            vehicleValidation(licenseNumber, ref vehiclePackage);
+            r_GarageModel.VehicleValidation(licenseNumber, ref vehiclePackage);
             Vehicle vehicle = vehiclePackage.Vehicle;
+            r_GarageModel.MotorizedValidation(vehicle);
+            float currentAmountOfFuel = (vehicle as IMotorized).CurrentAmountOfFuel;
+            float maxAmountOfFuel = (vehicle as IMotorized).MaxAmountOfFuel;
+            r_GarageModel.IsEqualsToMax(currentAmountOfFuel, maxAmountOfFuel);
             GarageEnums.eFuelType fuelType = 0;
-            fuelType = buildChoiceMenu(fuelType);
             r_UserInterfaceView.DisplayMessage("insert the amount of fuel to refuel:");
-            r_UserInterfaceView.GetVariable(ref amountOfFuelToRefuel);
+            float maxToFuel = r_GarageModel.SubTwoFloats(maxAmountOfFuel, currentAmountOfFuel);
+            r_UserInterfaceView.GetVariable(ref amountOfFuelToRefuel, k_MinIsFloatZero, maxToFuel);
+            fuelType = buildChoiceMenu(fuelType);
             r_GarageModel.FillFuelForMotorized(vehicle, fuelType, amountOfFuelToRefuel);
         }
 
@@ -162,10 +169,15 @@ namespace Ex03.ConsoleUI
             float amountOfTimeToCharge = 0;
             string licenseNumber = getLicenseNumber();
             VehiclePackage vehiclePackage = null;
-            vehicleValidation(licenseNumber, ref vehiclePackage);
+            r_GarageModel.VehicleValidation(licenseNumber, ref vehiclePackage);
             Vehicle vehicle = vehiclePackage.Vehicle;
+            r_GarageModel.ElectricalValidation(vehicle);
+            float maxBatteryTime = (vehicle as IElectrical).MaxBatteryTime;
+            float currentBatteryTime = (vehicle as IElectrical).BatteryTimeLeft;
+            r_GarageModel.IsEqualsToMax(currentBatteryTime, maxBatteryTime);
             r_UserInterfaceView.DisplayMessage("insert the amount of Time to charge:");
-            r_UserInterfaceView.GetVariable(ref amountOfTimeToCharge);
+            float maxToCharge = r_GarageModel.SubTwoFloats(maxBatteryTime, currentBatteryTime);
+            r_UserInterfaceView.GetVariable(ref amountOfTimeToCharge, k_MinIsFloatZero, maxToCharge);
             r_GarageModel.ChargeElectricVehicle(vehicle, amountOfTimeToCharge);
         }
 
@@ -173,7 +185,7 @@ namespace Ex03.ConsoleUI
         {
             string licenseNumber = getLicenseNumber();
             VehiclePackage vehiclePackage = null;
-            vehicleValidation(licenseNumber, ref vehiclePackage);
+            r_GarageModel.VehicleValidation(licenseNumber, ref vehiclePackage);
             string vehicleInfo = r_GarageModel.VehiclePackageToDisplay(vehiclePackage);
             r_UserInterfaceView.DisplayMessage(vehicleInfo);
         }
@@ -275,7 +287,7 @@ namespace Ex03.ConsoleUI
             licenseType = buildChoiceMenu(licenseType);
             r_UserInterfaceView.DisplayMessage("What is the volume of your motorcycle in CC?");
             int motorcycleVolume = 0;
-            r_UserInterfaceView.GetVariable(ref motorcycleVolume);
+            r_UserInterfaceView.GetVariable(ref motorcycleVolume, k_MinMotorcycleVolume, k_MaxnMotorcycleVolume);
             (io_VehicleToAdd as Motorcycle)?.AddMotorcycleFields(licenseType, motorcycleVolume);
         }
 
@@ -304,7 +316,6 @@ namespace Ex03.ConsoleUI
             string phoneNumber = null;
             r_UserInterfaceView.DisplayMessage("Please insert Your full name: ");
             r_UserInterfaceView.GetName(ref fullName, k_MinLengthForNames, k_MaxLengthForNames);
-            r_GarageModel.LettersValidation(fullName);
             r_UserInterfaceView.DisplayMessage("Please insert Your phone number: ");
             r_UserInterfaceView.GetNumbers(ref phoneNumber, k_MinLengthForPhoneNumber, k_MaxLengthForPhoneNumber);
             return (fullName, phoneNumber);
@@ -342,22 +353,6 @@ namespace Ex03.ConsoleUI
             int minVal = Enum.GetValues(typeof(T)).Cast<int>().Min();
             r_UserInterfaceView.GetVariable(ref userInput, minVal, maxVal);
             return (T)Enum.ToObject(typeof(T), userInput);
-        }
-
-        private void garageValidation()
-        {
-            if(r_GarageModel.IsEmpty())
-            {
-                throw new GarageExceptions.GarageIsEmpty();
-            }
-        }
-
-        private void vehicleValidation(string i_LicenseNumber, ref VehiclePackage i_VehiclePackage)
-        {
-            if(r_GarageModel.IsLicenseNumberMatch(i_LicenseNumber, ref i_VehiclePackage) == false)
-            {
-                throw new GarageExceptions.VehicleDoNotExist(i_LicenseNumber);
-            }
         }
     }
 }
