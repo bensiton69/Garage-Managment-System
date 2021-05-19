@@ -24,6 +24,14 @@ namespace Ex03.ConsoleUI
         {
             r_GarageModel = new GarageManagement();
             r_UserInterfaceView = new UserInterface();
+/*            r_GarageModel.AddNewVehicle(
+                "benjhbs",
+                "11111111",
+                new MotorizedMotorcycle("Honda motor", "111111", 11, "111111"));
+            r_GarageModel.AddNewVehicle(
+                "benjhbs",
+                "11111111",
+                new ElectricalMotorcycle("Honda motor", "222222", 11, "111111"));*/
         }
 
         public void Entry()

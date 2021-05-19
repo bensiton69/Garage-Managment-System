@@ -102,13 +102,6 @@ namespace Ex03.GarageLogic
 
         public void FillFuelForMotorized(Vehicle i_Vehicle, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
         {
-            float currentAmountOfFuel = (i_Vehicle as IMotorized).CurrentAmountOfFuel;
-            float maxAmountToRefuel = SubTwoFloats((i_Vehicle as IMotorized).MaxAmountOfFuel, currentAmountOfFuel);
-            if (!(i_AmountOfFuelToRefuel <= maxAmountToRefuel))
-            {
-                throw new GarageExceptions.ValueOutOfRangeException(0, maxAmountToRefuel);
-            }
-
             if (i_FuelType != (i_Vehicle as IMotorized).FuelType)
             {
                 throw new ArgumentException("Wrong fuel type!");
@@ -119,17 +112,7 @@ namespace Ex03.GarageLogic
 
         public void ChargeElectricVehicle(Vehicle i_Vehicle, float i_AmountOfTimeToCharge)
         {
-            float currentAmountOfTime = (i_Vehicle as IElectrical).BatteryTimeLeft;
-            float maxBatteryTime = SubTwoFloats((i_Vehicle as IElectrical).MaxBatteryTime, currentAmountOfTime);
-            float minTimeToCharge = 0;
-            if (i_AmountOfTimeToCharge <= maxBatteryTime)
-            {
-                (i_Vehicle as IElectrical).FillBattery(i_AmountOfTimeToCharge);
-            }
-            else
-            {
-                throw new GarageExceptions.ValueOutOfRangeException(minTimeToCharge, maxBatteryTime);
-            }
+            (i_Vehicle as IElectrical).FillBattery(i_AmountOfTimeToCharge);
         }
 
         public string VehiclePackageToDisplay(VehiclePackage i_VehiclePackage)
