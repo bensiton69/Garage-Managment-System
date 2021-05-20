@@ -95,9 +95,9 @@ namespace Ex03.GarageLogic
             return false;
         }
 
-        public void ChangeVehicleStatus(VehiclePackage io_VehiclePackage, GarageEnums.eVehicleStatus i_VehicleStatus)
+        public void ChangeVehicleStatus(VehiclePackage i_VehiclePackage, GarageEnums.eVehicleStatus i_VehicleStatus)
         {
-            io_VehiclePackage.Status = i_VehicleStatus;
+            i_VehiclePackage.Status = i_VehicleStatus;
         }
 
         public void FillFuelForMotorized(Vehicle i_Vehicle, GarageEnums.eFuelType i_FuelType, float i_AmountOfFuelToRefuel)
@@ -119,9 +119,9 @@ namespace Ex03.GarageLogic
         {
             string ownerName;
             string ownerPhone;
-            GarageEnums.eVehicleStatus vehicleStatus;
+            GarageEnums.eVehicleStatus vehicleStatus = i_VehiclePackage.Status;
             StringBuilder stringBuilder = new StringBuilder();
-            (ownerName, ownerPhone, vehicleStatus) = i_VehiclePackage.GetOwnerInfo();
+            (ownerName, ownerPhone) = i_VehiclePackage.GetOwnerInfo();
             stringBuilder.Append(string.Format(
                 @"
 Client Info:
@@ -200,6 +200,8 @@ Energy left: {2}.",
 
         public void GarageValidation()
         {
+            //// If garage has no cars, throws exception
+            //// The code of IsEmpty could be here, but separated to implement reusability in future 
             if (IsEmpty())
             {
                 throw new GarageExceptions.GarageIsEmpty();
@@ -208,6 +210,8 @@ Energy left: {2}.",
 
         public void VehicleValidation(string i_LicenseNumber, ref VehiclePackage i_VehiclePackage)
         {
+            //// Confirm that this vehicle does exists
+            //// prevent error: System.NullReferenceException
             if (IsLicenseNumberMatch(i_LicenseNumber, ref i_VehiclePackage) == false)
             {
                 throw new GarageExceptions.VehicleDoNotExist(i_LicenseNumber);
@@ -230,13 +234,15 @@ Energy left: {2}.",
             }
         }
 
-        public float SubTwoFloats(float i_FirstFloat, float i_SecondFloat)
+        public float SubTwoFloats(float i_Minuend, float i_Subtrahend)
         {
-            return (float)Math.Round(i_FirstFloat - i_SecondFloat, 1);
+            //// Managed the floating point subtraction problem 
+            return (float)Math.Round(i_Minuend - i_Subtrahend, 1);
         }
 
         public void IsEqualsToMax(float i_CurrentFloat, float i_MaxFloat)
         {
+            //// if val is already max, we wouldn't like you to do any actions on it
             if(SubTwoFloats(i_CurrentFloat, i_MaxFloat) == 0)
             {
                 throw new GarageExceptions.VehicleIsMax();

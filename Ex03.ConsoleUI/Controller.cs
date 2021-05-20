@@ -14,7 +14,7 @@ namespace Ex03.ConsoleUI
         private const int k_MinLengthForPhoneNumber = 6;
         private const int k_MaxLengthForPhoneNumber = 10;
         private const int k_MinMotorcycleVolume = 50;
-        private const int k_MaxnMotorcycleVolume = 1890;
+        private const int k_MaxMotorcycleVolume = 1890;
         private const float k_MinIsFloatZero = 0;
         private const float k_MaxValForTruckCarry = 99999;
         private readonly GarageManagement r_GarageModel;
@@ -24,14 +24,6 @@ namespace Ex03.ConsoleUI
         {
             r_GarageModel = new GarageManagement();
             r_UserInterfaceView = new UserInterface();
-/*            r_GarageModel.AddNewVehicle(
-                "benjhbs",
-                "11111111",
-                new MotorizedMotorcycle("Honda motor", "111111", 11, "111111"));
-            r_GarageModel.AddNewVehicle(
-                "benjhbs",
-                "11111111",
-                new ElectricalMotorcycle("Honda motor", "222222", 11, "111111"));*/
         }
 
         public void Entry()
@@ -244,16 +236,16 @@ namespace Ex03.ConsoleUI
             r_GarageModel.AddNewVehicle(costumerName, costumerPhone, vehicleToAdd);
         }
 
-        private void setMotorizedFields(Vehicle io_VehicleToAdd)
+        private void setMotorizedFields(Vehicle i_VehicleToAdd)
         {
             r_UserInterfaceView.DisplayMessage("What is The current amount of fuel in your vehicle?");
             float currentAmountOfFuel = 0;
-            float maxAmountOfFuel = (io_VehicleToAdd as IMotorized).MaxAmountOfFuel;
+            float maxAmountOfFuel = (i_VehicleToAdd as IMotorized).MaxAmountOfFuel;
             r_UserInterfaceView.GetVariable(ref currentAmountOfFuel, k_MinIsFloatZero, maxAmountOfFuel);
-            (io_VehicleToAdd as IMotorized)?.AddMotorizedFields(currentAmountOfFuel);
+            (i_VehicleToAdd as IMotorized)?.AddMotorizedFields(currentAmountOfFuel);
         }
 
-        private void setTruckFields(Vehicle io_VehicleToAdd)
+        private void setTruckFields(Vehicle i_VehicleToAdd)
         {
             GarageEnums.eChoice isDangerChoice = 0;
             float maxWeight = 0;
@@ -267,39 +259,39 @@ namespace Ex03.ConsoleUI
 
             r_UserInterfaceView.DisplayMessage("What is the max weight to carry?");
             r_UserInterfaceView.GetVariable(ref maxWeight, k_MinIsFloatZero, k_MaxValForTruckCarry);
-            (io_VehicleToAdd as Truck)?.AddTruckFields(isDanger, maxWeight);
+            (i_VehicleToAdd as Truck)?.AddTruckFields(isDanger, maxWeight);
         }
 
-        private void setWheelCurrentAirPressure(Vehicle io_VehicleToAdd)
+        private void setWheelCurrentAirPressure(Vehicle i_VehicleToAdd)
         {
             float currentWheelPressure = 0;
-            float maxAirPressure = io_VehicleToAdd.Wheels.FirstOrDefault().MaxAirPressure;
+            float maxAirPressure = i_VehicleToAdd.Wheels.FirstOrDefault().MaxAirPressure;
             r_UserInterfaceView.DisplayMessage("Please insert the current air pressure your of wheels: ");
             r_UserInterfaceView.GetVariable(ref currentWheelPressure, k_MinIsFloatZero, maxAirPressure);
-            io_VehicleToAdd.SetWheelCurrentAirPressure(currentWheelPressure);
+            i_VehicleToAdd.SetWheelCurrentAirPressure(currentWheelPressure);
         }
 
-        private void setElectricalFields(Vehicle io_VehicleToAdd)
+        private void setElectricalFields(Vehicle i_VehicleToAdd)
         {
             float batteryTimeLeft = 0;
             r_UserInterfaceView.DisplayMessage("how many battery time left for electrical vehicle?");
-            float maxTime = (io_VehicleToAdd as IElectrical).MaxBatteryTime;
+            float maxTime = (i_VehicleToAdd as IElectrical).MaxBatteryTime;
             r_UserInterfaceView.GetVariable(ref batteryTimeLeft, k_MinIsFloatZero, maxTime);
-            (io_VehicleToAdd as IElectrical)?.AddElectricalFields(batteryTimeLeft);
+            (i_VehicleToAdd as IElectrical)?.AddElectricalFields(batteryTimeLeft);
         }
 
-        private void setMotorcycleFields(Vehicle io_VehicleToAdd)
+        private void setMotorcycleFields(Vehicle i_VehicleToAdd)
         {
             GarageEnums.eLicenseType licenseType = 0;
             r_UserInterfaceView.DisplayMessage("What is the licenseType of your motorcycle?");
             licenseType = buildChoiceMenu(licenseType);
             r_UserInterfaceView.DisplayMessage("What is the volume of your motorcycle in CC?");
             int motorcycleVolume = 0;
-            r_UserInterfaceView.GetVariable(ref motorcycleVolume, k_MinMotorcycleVolume, k_MaxnMotorcycleVolume);
-            (io_VehicleToAdd as Motorcycle)?.AddMotorcycleFields(licenseType, motorcycleVolume);
+            r_UserInterfaceView.GetVariable(ref motorcycleVolume, k_MinMotorcycleVolume, k_MaxMotorcycleVolume);
+            (i_VehicleToAdd as Motorcycle)?.AddMotorcycleFields(licenseType, motorcycleVolume);
         }
 
-        private void setCarFields(Vehicle io_VehicleToAdd)
+        private void setCarFields(Vehicle i_VehicleToAdd)
         {
             GarageEnums.eColor color = 0;
             GarageEnums.eNumberOfDoor numberOfDoor = 0;
@@ -307,7 +299,7 @@ namespace Ex03.ConsoleUI
             color = buildChoiceMenu(color);
             r_UserInterfaceView.DisplayMessage("How many doors for your car?");
             numberOfDoor = buildChoiceMenu(numberOfDoor);
-            (io_VehicleToAdd as Car)?.AddCarFields(color, numberOfDoor);
+            (i_VehicleToAdd as Car)?.AddCarFields(color, numberOfDoor);
         }
 
         private string getLicenseNumber()

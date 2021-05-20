@@ -152,7 +152,7 @@ namespace Ex03.ConsoleUI
             {
                 GetVariable(ref i_FullName, i_MinLengthForNames, i_MaxLengthForNames);
 
-                if(i_FullName.All(charToCompare => char.IsWhiteSpace(charToCompare) || char.IsLetter(charToCompare)))
+                if(i_FullName.All(i_CharToCompare => char.IsWhiteSpace(i_CharToCompare) || char.IsLetter(i_CharToCompare)))
                 {
                     isValid = true;
                 }

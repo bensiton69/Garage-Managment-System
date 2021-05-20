@@ -4,6 +4,7 @@ namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
+        //// License Number is case sensitive
         private readonly string r_ModelName;
         private readonly string r_LicenseNumber;
         private readonly float r_EnergyLeft;
@@ -36,10 +37,10 @@ namespace Ex03.GarageLogic
             float i_MaxAirPressure)
         {
             int minVal = 0;
-            int maxnVal = 100;
-            if(!(minVal <= i_EnergyLeft) || !(i_EnergyLeft <= maxnVal))
+            int maxVal = 100;
+            if(!(minVal <= i_EnergyLeft) || !(i_EnergyLeft <= maxVal))
             {
-                throw new GarageExceptions.ValueOutOfRangeException(0, 100);
+                throw new GarageExceptions.ValueOutOfRangeException(minVal, maxVal);
             }
 
             r_ModelName = i_ModelName;
